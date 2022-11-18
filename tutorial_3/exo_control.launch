@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+<node name="exo_control"
+          pkg="exo_control"
+          type="exo_control"
+          output="screen">
+  <rosparam file="$(find exo_control)/launch/configs/control_params.yaml" command="load"/>
+  </node>
+
+</launch>
