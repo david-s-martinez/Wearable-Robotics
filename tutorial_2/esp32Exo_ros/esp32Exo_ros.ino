@@ -3,6 +3,8 @@
 
 #include <ESP32Servo.h>
 #include <std_msgs/Float64.h>
+
+#include <std_msgs/Float32.h>
 #include <std_srvs/SetBool.h>
  
 #include <std_msgs/UInt16.h>
@@ -12,36 +14,24 @@ Servo myservo;
 
 #define SERVO_PIN 12
 
-double posServo1 = 2500; //0
-double posServo2 = -2500; //90
+double posServo1 = 2100; //0
+double posServo2 = 1160; //90
 
-//double posServo2 = 1160; //90
-
- 
-void servo_set( const std_msgs::UInt16& cmd_msg){
-  double toggle = 2;
-  toggle = cmd_msg.data;
-  char arr[sizeof(toggle)];
-  memcpy(arr,&toggle,sizeof(toggle)); 
-  printf(arr);
-  if(toggle==1){
-    double angle = mapf(0.0, 0.0,1.570796, posServo1, posServo2);
-    myservo.writeMicroseconds(angle);
-    toggle = 2;
-  }
-  if(toggle==0){
-    double angle = mapf(0.785398, 0.0,1.570796, posServo1, posServo2); 
-    myservo.writeMicroseconds(angle);
-    toggle = 2;
-  }
+void servo_set( const std_msgs::Float32& cmd_msg){
+  float degs = cmd_msg.data -30.0;
+  float rads = degs * (3.1416/180.0);
+  double angle = mapf(rads, 0.0,1.570796, posServo1, posServo2);
+  myservo.writeMicroseconds(angle);
+  
 }
-
+//
 double mapf(double x, double in_min, double in_max, double out_min, double out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-ros::Subscriber<std_msgs::UInt16> sub("servo", servo_set);
+ros::Subscriber<std_msgs::Float32> sub("servo", servo_set);
+
 void setup()
 {
   nh.initNode();
