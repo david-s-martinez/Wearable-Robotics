@@ -33,6 +33,7 @@ cf50858487680812ce327666d5bc28b4 /home/david/exo_ws/devel/share/gennodejs/ros/ro
 e03c5651c295e44cb1707acb93eb9a43 /home/david/exo_ws/devel/share/gennodejs/ros/rosserial_msgs/msg/Log.js
 f844119641a09ebc4b8cb43e6a1971be /home/david/exo_ws/devel/share/gennodejs/ros/rosserial_msgs/msg/TopicInfo.js
 0061e2a30e9f8e8b13d52941b3805565 /home/david/exo_ws/devel/share/gennodejs/ros/rosserial_msgs/srv/RequestParam.js
+8dd185fdb1edfab3ea75f86a2867a53a /home/david/exo_ws/devel/share/roseus/ros/exo_control/manifest.l
 a98bb90af0f4705f0c9441421424ed3e /home/david/exo_ws/devel/share/roseus/ros/rosserial_arduino/manifest.l
 ddc56023889e2040fd4f1c58b309d16e /home/david/exo_ws/devel/share/roseus/ros/rosserial_arduino/msg/Adc.l
 5981a32596ae29422188fbcfd7b21eb3 /home/david/exo_ws/devel/share/roseus/ros/rosserial_arduino/srv/Test.l
@@ -44,6 +45,7 @@ b50b6a8c9df1c82da155316d218baf5b /home/david/exo_ws/devel/share/roseus/ros/rosse
 06c2b5b0c2fceeae34b9426ab210f605 /home/david/exo_ws/devel/share/roseus/ros/rosserial_msgs/msg/TopicInfo.l
 a8eb86cc9b1ba41fe8d0ffa4cabb612a /home/david/exo_ws/devel/share/roseus/ros/rosserial_msgs/srv/RequestParam.l
 72ef3dd0e467466a8cb4c4e439b9b189 CMakeFiles/clean_test_results
+54e13377c2fc9623f4716bdb5e77efac exo_control/CMakeFiles/exo_control_generate_messages_eus
 db4e13949f325f5f771ec92f07a4d34f rosserial/rosserial_arduino/CMakeFiles/_rosserial_arduino_generate_messages_check_deps_Adc
 d1be8c20d31a17f6d7bc33886586dcce rosserial/rosserial_arduino/CMakeFiles/_rosserial_arduino_generate_messages_check_deps_Test
 ab6bf449d65995c797f50eea2eefdf6a rosserial/rosserial_arduino/CMakeFiles/rosserial_arduino_generate_messages_cpp

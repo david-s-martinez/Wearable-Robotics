@@ -316,6 +316,9 @@ EMPY_EXECUTABLE:FILEPATH=EMPY_EXECUTABLE-NOTFOUND
 //Empy script
 EMPY_SCRIPT:STRING=/usr/lib/python3/dist-packages/em.py
 
+//The directory containing a CMake configuration file for Eigen3.
+Eigen3_DIR:PATH=/usr/lib/cmake/eigen3
+
 //The directory containing a CMake configuration file for GMock.
 GMock_DIR:PATH=GMock_DIR-NOTFOUND
 
@@ -371,6 +374,21 @@ Project_BINARY_DIR:STATIC=/home/david/exo_ws/build
 //Value Computed by CMake
 Project_SOURCE_DIR:STATIC=/home/david/exo_ws/src
 
+//The directory containing a CMake configuration file for Qt5Core.
+Qt5Core_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5Core
+
+//The directory containing a CMake configuration file for Qt5Gui.
+Qt5Gui_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5Gui
+
+//The directory containing a CMake configuration file for Qt5OpenGL.
+Qt5OpenGL_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5OpenGL
+
+//The directory containing a CMake configuration file for Qt5Widgets.
+Qt5Widgets_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5Widgets
+
+//The directory containing a CMake configuration file for Qt5.
+Qt5_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5
+
 //Path to a library.
 RT_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.so
 
@@ -379,6 +397,15 @@ SETUPTOOLS_DEB_LAYOUT:BOOL=ON
 
 //Name of the computer/site where compile is being run
 SITE:STRING=david-Legion-5-Pro-16IAH7H
+
+//The directory containing a CMake configuration file for SkinCore.
+SkinCore_DIR:PATH=/usr/share/cmake/SkinCore
+
+//The directory containing a CMake configuration file for TCommon.
+TCommon_DIR:PATH=/usr/share/cmake/TCommon
+
+//The directory containing a CMake configuration file for TThreads.
+TThreads_DIR:PATH=/usr/share/cmake/TThreads
 
 //LSB Distrib tag
 UBUNTU:BOOL=TRUE
@@ -401,6 +428,9 @@ _gtest_INCLUDES:FILEPATH=/usr/include/gtest/gtest.h
 //Path to a file.
 _gtest_SOURCES:FILEPATH=/usr/src/gtest/src/gtest.cc
 
+//The directory containing a CMake configuration file for actionlib.
+actionlib_DIR:PATH=/opt/ros/noetic/share/actionlib/cmake
+
 //The directory containing a CMake configuration file for actionlib_msgs.
 actionlib_msgs_DIR:PATH=/opt/ros/noetic/share/actionlib_msgs/cmake
 
@@ -421,6 +451,12 @@ catkin_DIR:PATH=/opt/ros/noetic/share/catkin/cmake
 
 //The directory containing a CMake configuration file for cpp_common.
 cpp_common_DIR:PATH=/opt/ros/noetic/share/cpp_common/cmake
+
+//Value Computed by CMake
+exo_control_BINARY_DIR:STATIC=/home/david/exo_ws/build/exo_control
+
+//Value Computed by CMake
+exo_control_SOURCE_DIR:STATIC=/home/david/exo_ws/src/exo_control
 
 //The directory containing a CMake configuration file for gencpp.
 gencpp_DIR:PATH=/opt/ros/noetic/share/gencpp/cmake
@@ -489,8 +525,17 @@ gtest_hide_internal_symbols:BOOL=OFF
 //Dependencies for the target
 gtest_main_LIB_DEPENDS:STATIC=general;gtest;
 
+//The directory containing a CMake configuration file for interactive_markers.
+interactive_markers_DIR:PATH=/opt/ros/noetic/share/interactive_markers/cmake
+
+//The directory containing a CMake configuration file for kdl_conversions.
+kdl_conversions_DIR:PATH=/opt/ros/noetic/share/kdl_conversions/cmake
+
 //Path to a library.
-lib:FILEPATH=/opt/ros/noetic/lib/librostime.so
+lib:FILEPATH=/opt/ros/noetic/lib/libtum_ics_skin_descr.so
+
+//The directory containing a CMake configuration file for message_filters.
+message_filters_DIR:PATH=/opt/ros/noetic/share/message_filters/cmake
 
 //The directory containing a CMake configuration file for message_generation.
 message_generation_DIR:PATH=/opt/ros/noetic/share/message_generation/cmake
@@ -512,6 +557,9 @@ roscpp_serialization_DIR:PATH=/opt/ros/noetic/share/roscpp_serialization/cmake
 
 //The directory containing a CMake configuration file for roscpp_traits.
 roscpp_traits_DIR:PATH=/opt/ros/noetic/share/roscpp_traits/cmake
+
+//The directory containing a CMake configuration file for rosgraph.
+rosgraph_DIR:PATH=/opt/ros/noetic/share/rosgraph/cmake
 
 //The directory containing a CMake configuration file for rosgraph_msgs.
 rosgraph_msgs_DIR:PATH=/opt/ros/noetic/share/rosgraph_msgs/cmake
@@ -645,8 +693,50 @@ servo_control_SOURCE_DIR:STATIC=/home/david/exo_ws/src/servo_control
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
 
+//The directory containing a CMake configuration file for tf2.
+tf2_DIR:PATH=/opt/ros/noetic/share/tf2/cmake
+
+//The directory containing a CMake configuration file for tf2_geometry_msgs.
+tf2_geometry_msgs_DIR:PATH=/opt/ros/noetic/share/tf2_geometry_msgs/cmake
+
+//The directory containing a CMake configuration file for tf2_msgs.
+tf2_msgs_DIR:PATH=/opt/ros/noetic/share/tf2_msgs/cmake
+
+//The directory containing a CMake configuration file for tf2_py.
+tf2_py_DIR:PATH=/opt/ros/noetic/share/tf2_py/cmake
+
+//The directory containing a CMake configuration file for tf2_ros.
+tf2_ros_DIR:PATH=/opt/ros/noetic/share/tf2_ros/cmake
+
+//The directory containing a CMake configuration file for tf.
+tf_DIR:PATH=/opt/ros/noetic/share/tf/cmake
+
+//The directory containing a CMake configuration file for tf_conversions.
+tf_conversions_DIR:PATH=/opt/ros/noetic/share/tf_conversions/cmake
+
 //The directory containing a CMake configuration file for topic_tools.
 topic_tools_DIR:PATH=/opt/ros/noetic/share/topic_tools/cmake
+
+//The directory containing a CMake configuration file for tum_ics_params.
+tum_ics_params_DIR:PATH=/opt/ros/noetic/share/tum_ics_params/cmake
+
+//The directory containing a CMake configuration file for tum_ics_skin_bridge.
+tum_ics_skin_bridge_DIR:PATH=/opt/ros/noetic/share/tum_ics_skin_bridge/cmake
+
+//The directory containing a CMake configuration file for tum_ics_skin_common.
+tum_ics_skin_common_DIR:PATH=/opt/ros/noetic/share/tum_ics_skin_common/cmake
+
+//The directory containing a CMake configuration file for tum_ics_skin_descr.
+tum_ics_skin_descr_DIR:PATH=/opt/ros/noetic/share/tum_ics_skin_descr/cmake
+
+//The directory containing a CMake configuration file for tum_ics_skin_msgs.
+tum_ics_skin_msgs_DIR:PATH=/opt/ros/noetic/share/tum_ics_skin_msgs/cmake
+
+//The directory containing a CMake configuration file for tum_ics_tfs.
+tum_ics_tfs_DIR:PATH=/opt/ros/noetic/share/tum_ics_tfs/cmake
+
+//The directory containing a CMake configuration file for visualization_msgs.
+visualization_msgs_DIR:PATH=/opt/ros/noetic/share/visualization_msgs/cmake
 
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/noetic/share/xmlrpcpp/cmake
@@ -801,7 +891,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=20
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=21
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -852,6 +942,12 @@ FIND_PACKAGE_MESSAGE_DETAILS_PY_em:INTERNAL=[/usr/lib/python3/dist-packages/em.p
 FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python3][v3.8.10()]
 //Details about finding PythonLibs
 FIND_PACKAGE_MESSAGE_DETAILS_PythonLibs:INTERNAL=[/usr/lib/x86_64-linux-gnu/libpython3.8.so][/usr/include/python3.8][v3.8.10()]
+//Details about finding SkinCore
+FIND_PACKAGE_MESSAGE_DETAILS_SkinCore:INTERNAL=[/usr/include/tumskin;/usr/include/eigen3;/usr/include/tumtools][/usr/lib/tumskin/libtumskinSkinCore.so;/usr/lib/tumtools/libtumtoolsThreads.so][v()]
+//Details about finding TCommon
+FIND_PACKAGE_MESSAGE_DETAILS_TCommon:INTERNAL=[/usr/include/tumtools][/usr/lib/tumtools/libtumtoolsCommon.so][v()]
+//Details about finding TThreads
+FIND_PACKAGE_MESSAGE_DETAILS_TThreads:INTERNAL=[/usr/include/tumtools][/usr/lib/tumtools/libtumtoolsThreads.so][v()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 GMOCK_FROM_SOURCE_FOUND:INTERNAL=TRUE

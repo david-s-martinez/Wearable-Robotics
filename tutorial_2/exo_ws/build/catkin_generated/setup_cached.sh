@@ -7,6 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PKG_CONFIG_PATH="/home/david/exo_ws/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/david/exo_ws/build'
-export PYTHONPATH="/home/david/exo_ws/devel/lib/python3/dist-packages:$PYTHONPATH"
