@@ -19,10 +19,15 @@ rosrun servo_control publisher.py
 <br/>
 
 <br/>
-To send angle run :
+To send angle run (angle 30-120):
 
 <pre> 
-rostopic pub servo std_msgs/UInt16 1 (1 for 180 0 for 0)
+rostopic pub servo std_msgs/Float32 120.0 
 </pre> 
+<br/>
+launch cpp exo control :
 
+<pre> 
+roslaunch exo_control exo_control.launch
+</pre> 
 <br/>
