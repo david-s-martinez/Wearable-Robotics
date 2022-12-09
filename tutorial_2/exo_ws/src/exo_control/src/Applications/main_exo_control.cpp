@@ -13,13 +13,13 @@ double rad2deg(double radian)
 
 int main( int argc, char** argv )
 {
-    ros::init(argc, argv, "servo");
+    ros::init(argc, argv, "servo",ros::init_options::AnonymousName);
             // ,ros::init_options::AnonymousName);
     ros::NodeHandle n;
     // ros::Rate r(200);
-    ros::Publisher servo_pub = n.advertise<std_msgs::Float32>("talker", 10);
-    ros::Rate loop_rate(1);
-    double delta_t = 1/(double)200; 
+    ros::Publisher servo_pub = n.advertise<std_msgs::Float32>("servo", 10);
+    ros::Rate loop_rate(200);
+    double delta_t = 1/(double)100; 
 
     // load your params
     double L1;
@@ -67,7 +67,7 @@ int main( int argc, char** argv )
     double tau = 0; 
     
     //init params 
-    double q1 = deg2rad(90); 
+    double q1 = deg2rad(0); 
     double qd1 = 0;
     double qdd1 = 0; 
 
@@ -95,7 +95,7 @@ int main( int argc, char** argv )
         q1_.data = rad2deg(q1);
         // ROS_WARN_STREAM("qdd1"<<qdd1);
         //ROS_WARN_STREAM("qd1"<<qd1);
-        if (isnan(q1)){
+        if (isnan(q1)&& rad2deg(q1) <= 0.0 ){
         std::cout << "nan found";
         break;
         }
