@@ -228,6 +228,21 @@ exo_control_generate_messages_nodejs/fast:
 .PHONY : exo_control_generate_messages_nodejs/fast
 
 # Convenience name for target.
+exo_control/CMakeFiles/ExoControllers.dir/rule:
+	cd /home/david/exo_ws/build && $(MAKE) -f CMakeFiles/Makefile2 exo_control/CMakeFiles/ExoControllers.dir/rule
+.PHONY : exo_control/CMakeFiles/ExoControllers.dir/rule
+
+# Convenience name for target.
+ExoControllers: exo_control/CMakeFiles/ExoControllers.dir/rule
+
+.PHONY : ExoControllers
+
+# fast build rule for target.
+ExoControllers/fast:
+	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/build
+.PHONY : ExoControllers/fast
+
+# Convenience name for target.
 exo_control/CMakeFiles/exo_control_genlisp.dir/rule:
 	cd /home/david/exo_ws/build && $(MAKE) -f CMakeFiles/Makefile2 exo_control/CMakeFiles/exo_control_genlisp.dir/rule
 .PHONY : exo_control/CMakeFiles/exo_control_genlisp.dir/rule
@@ -749,6 +764,33 @@ src/Applications/main_exo_control.cpp.s:
 	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/exo_control.dir/build.make exo_control/CMakeFiles/exo_control.dir/src/Applications/main_exo_control.cpp.s
 .PHONY : src/Applications/main_exo_control.cpp.s
 
+src/exo_pos_control.o: src/exo_pos_control.cpp.o
+
+.PHONY : src/exo_pos_control.o
+
+# target to build an object file
+src/exo_pos_control.cpp.o:
+	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/src/exo_pos_control.cpp.o
+.PHONY : src/exo_pos_control.cpp.o
+
+src/exo_pos_control.i: src/exo_pos_control.cpp.i
+
+.PHONY : src/exo_pos_control.i
+
+# target to preprocess a source file
+src/exo_pos_control.cpp.i:
+	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/src/exo_pos_control.cpp.i
+.PHONY : src/exo_pos_control.cpp.i
+
+src/exo_pos_control.s: src/exo_pos_control.cpp.s
+
+.PHONY : src/exo_pos_control.s
+
+# target to generate assembly for a file
+src/exo_pos_control.cpp.s:
+	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/src/exo_pos_control.cpp.s
+.PHONY : src/exo_pos_control.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -761,6 +803,7 @@ help:
 	@echo "... test"
 	@echo "... exo_control_generate_messages_nodejs"
 	@echo "... install/strip"
+	@echo "... ExoControllers"
 	@echo "... exo_control_genlisp"
 	@echo "... exo_control_geneus"
 	@echo "... edit_cache"
@@ -802,6 +845,9 @@ help:
 	@echo "... src/Applications/main_exo_control.o"
 	@echo "... src/Applications/main_exo_control.i"
 	@echo "... src/Applications/main_exo_control.s"
+	@echo "... src/exo_pos_control.o"
+	@echo "... src/exo_pos_control.i"
+	@echo "... src/exo_pos_control.s"
 .PHONY : help
 
 

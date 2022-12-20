@@ -265,6 +265,7 @@
 /home/david/exo_ws/build/exo_control/CMakeFiles/test.dir
 /home/david/exo_ws/build/exo_control/CMakeFiles/exo_control_generate_messages_nodejs.dir
 /home/david/exo_ws/build/exo_control/CMakeFiles/install/strip.dir
+/home/david/exo_ws/build/exo_control/CMakeFiles/ExoControllers.dir
 /home/david/exo_ws/build/exo_control/CMakeFiles/exo_control_genlisp.dir
 /home/david/exo_ws/build/exo_control/CMakeFiles/exo_control_geneus.dir
 /home/david/exo_ws/build/exo_control/CMakeFiles/edit_cache.dir

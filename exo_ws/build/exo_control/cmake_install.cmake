@@ -81,15 +81,15 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/exo_control/exo_control")
     file(RPATH_CHECK
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/exo_control/exo_control"
-         RPATH "/opt/ros/noetic/lib:/usr/lib/tumtools")
+         RPATH "/opt/ros/noetic/lib:/usr/lib/tumtools:/home/david/exo_ws/devel/lib")
   endif()
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/exo_control" TYPE EXECUTABLE FILES "/home/david/exo_ws/devel/lib/exo_control/exo_control")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/exo_control/exo_control" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/exo_control/exo_control")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/exo_control/exo_control"
-         OLD_RPATH "/opt/ros/noetic/lib:/usr/lib/tumtools:"
-         NEW_RPATH "/opt/ros/noetic/lib:/usr/lib/tumtools")
+         OLD_RPATH "/opt/ros/noetic/lib:/usr/lib/tumtools:/home/david/exo_ws/devel/lib:"
+         NEW_RPATH "/opt/ros/noetic/lib:/usr/lib/tumtools:/home/david/exo_ws/devel/lib")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/exo_control/exo_control")
     endif()

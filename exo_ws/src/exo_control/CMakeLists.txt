@@ -101,6 +101,26 @@ include_directories(
 file(GLOB_RECURSE MY_CTRL_INC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS
         include/*.h)
 
+add_library(ExoControllers src/exo_pos_control.cpp
+    ${MY_CTRL_INC}
+)
+
+target_link_libraries(ExoControllers
+    ${catkin_LIBRARIES}
+    ${roscpp_LIBRARIES}
+    ${TCOMMON_LIBRARIES}
+    ${QT_LIBRARIES}
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
+    Qt5::OpenGL
+)
+
+add_dependencies(ExoControllers
+  ${sensor_msgs_EXPORTED_TARGETS}
+  ${std_msgs_EXPORTED_TARGETS}
+  ${visualization_msgs_EXPORTED_TARGETS}
+)
 
 set(APP_TARGETS
   exo_control
@@ -118,6 +138,7 @@ foreach(target ${APP_TARGETS})
       Qt5::Gui
       Qt5::Widgets
       Qt5::OpenGL
+      ExoControllers
   )
 endforeach()
      

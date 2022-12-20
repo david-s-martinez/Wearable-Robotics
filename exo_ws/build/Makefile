@@ -1793,6 +1793,19 @@ exo_control_generate_messages_nodejs/fast:
 .PHONY : exo_control_generate_messages_nodejs/fast
 
 #=============================================================================
+# Target rules for targets named ExoControllers
+
+# Build rule for target.
+ExoControllers: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ExoControllers
+.PHONY : ExoControllers
+
+# fast build rule for target.
+ExoControllers/fast:
+	$(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/build
+.PHONY : ExoControllers/fast
+
+#=============================================================================
 # Target rules for targets named exo_control_genlisp
 
 # Build rule for target.
@@ -2372,6 +2385,7 @@ help:
 	@echo "... exo_control"
 	@echo "... exo_control_generate_messages_py"
 	@echo "... exo_control_generate_messages_nodejs"
+	@echo "... ExoControllers"
 	@echo "... exo_control_genlisp"
 	@echo "... exo_control_geneus"
 	@echo "... tf_generate_messages_lisp"
