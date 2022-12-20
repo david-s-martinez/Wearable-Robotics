@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/Float32.h"
+#include <exo_control/exo_pos_control.h>
 #include <iostream>
 #include <cmath>
 double deg2rad(double degree){
@@ -13,6 +14,7 @@ double rad2deg(double radian)
 
 int main( int argc, char** argv )
 {
+  
     ros::init(argc, argv, "servo",ros::init_options::AnonymousName);
             // ,ros::init_options::AnonymousName);
     ros::NodeHandle n;
@@ -80,6 +82,12 @@ int main( int argc, char** argv )
     double c_matrix;
     double g_matrix;
     double b_matrix;
+    
+    ExoControllers::PosControl posControl(L1, L2, m2, b1, k1, theta1, gx, gy);
+    Vector3d qEnd;
+    qEnd << deg2rad(-180),0.0,0.0;
+    double timeEnd = 5;
+    posControl.init(qEnd,timeEnd);
     while(ros::ok())
     {        
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
@@ -88,6 +96,7 @@ int main( int argc, char** argv )
         b_matrix = b1*qd1;
         
         // calculate qdd1 and integrate 
+        tau = posControl.update(delta_t,q1,qd1,qdd1);
         qdd1=(tau- b_matrix*qd1 - g_matrix - c_matrix*qd1)/m_matrix;
         qd1 = delta_t *qdd1 + qd1;
         q1 = delta_t *qd1 + q1;
