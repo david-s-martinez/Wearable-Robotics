@@ -71,38 +71,47 @@ namespace ExoControllers{
         q << qi,qf,qpi,qpf,qppi,qppf;
 
         T <<     1, t0, pow(t0,2), pow(t0,3),   pow(t0,4),    pow(t0,5),
-                 1, tf, ... //toDO! 
-
+                 1, tf, pow(tf,2), pow(tf,3),   pow(tf,4),    pow(tf,5),    //to Do!
+                 0, 1,      2*t0, 3*pow(t0,2), 4*pow(t0,3), 5*pow(t0,4),    //to Do!
+                 0, 1,      2*tf, 3*pow(tf,2), 4*pow(tf,3), 5*pow(tf,4),    //to Do!
+                 0, 0,         2,      6*t0, 12*pow(t0,2), 20*pow(t0,3),   //to Do!
+                 0, 0,         2,      6*tf, 12*pow(tf,2), 20*pow(tf,3);   //to Do!
 
         aq1 = T.colPivHouseholderQr().solve(q);
       }
 
       if(tc<=tf)
       {
-      p << 1, tc, pow(tc,2), pow(tc,3), pow(tc,4), pow(tc,5);
-      v << //to Do
-      a << // to Do
+      p << 1, tc, pow(tc,2), pow(tc,3), pow(tc,4), pow(tc,5);   //to Do!
+      v << 0, 1, 2*tc, 3*pow(tc,2), 4*pow(tc,3), 5*pow(tc,4);   //to Do!
+      a << 0, 0, 2, 6*tc, 12*pow(tc,2), 20*pow(tc,3);           //to Do!
       m_q_des =  p.transpose()*aq1;
-      m_qd_des = //to Do
-      m_qdd_des = // to Do 
+      m_qd_des = v.transpose()*aq1;     //to Do!
+      m_qdd_des = a.transpose()*aq1;    //to Do!
       }
       else{ 
-        m_q_des = //to Do
+        m_q_des = qf;   //to Do!
         m_qd_des = qpf;
-        m_qdd_des = //to Do
+        m_qdd_des = qppf;   //to Do!
       }
     }
 
     // 4. regressor
     double PosControl::YrTheta(double q1, double qd1, double qd1r, double qdd1r)
     {
-        MatrixXd Yr(1,//to DO);
-        MatrixXd Theta(//to DO,1);
+        MatrixXd Yr(1,4);   //to DO,)
+        MatrixXd Theta(4,1);//to DO,1);
 
         Yr(0,0) = qdd1r;
-        Yr(0,1) = //to Do! 
+        Yr(0,1) = q1; //to Do! 
+        Yr(0,2) = -1;
+        Yr(0,3) = (m_gy*cos(q1)-m_gx*sin(q1))/2;
 
-        Theta(0,0) = m_I233 ... // to Do
+        Theta(0,0) = m_I233 + pow(m_L2,2)*m_m2/4; // to Do
+        Theta(1,0) = m_k1;
+        Theta(2,0) = m_k1 * m_theta1;
+        Theta(3,0) = m_L2*m_m2;
+        
 
         MatrixXd taor = Yr*Theta; 
         return taor(0,0);
@@ -136,13 +145,13 @@ namespace ExoControllers{
         }
 
         double deltaQ = q1 - m_q_des;
-        double deltaQd = // to Do! 
+        double deltaQd = - m_kp*deltaQ; // to Do! 
 
-        double qd1r = // to Do!
-        double qdd1r = qdd1 - m_kp*deltaQd; 
+        double qd1r = m_qd_des - m_kp*deltaQ; // to Do!
+        double qdd1r = m_qdd_des - m_kp*deltaQd; //double qdd1r = qdd1 - m_kp*deltaQd;
 
-        double Sq = // to DO! 
-        m_tao = // to Do! 
+        double Sq = qd1 - qd1r // to DO! 
+        m_tao = - m_kd*Sq + YrTheta() // to Do! 
 
         return m_tao;
     }
