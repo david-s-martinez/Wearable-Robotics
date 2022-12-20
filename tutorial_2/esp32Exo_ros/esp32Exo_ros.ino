@@ -10,10 +10,10 @@
 #include <std_msgs/UInt16.h>
 #include <string.h>
 ros::NodeHandle nh;
-Servo myservo;
+Servo myservo, myservo1;
 
+#define SERVO_PIN1 14
 #define SERVO_PIN 12
-
 double posServo1 = 2100; //0
 double posServo2 = 1160; //90
 
@@ -22,7 +22,7 @@ void servo_set( const std_msgs::Float32& cmd_msg){
   float rads = degs * (3.1416/180.0);
   double angle = mapf(rads, 0.0,1.570796, posServo1, posServo2);
   myservo.writeMicroseconds(angle);
-  
+  myservo1.writeMicroseconds(angle);
 }
 //
 double mapf(double x, double in_min, double in_max, double out_min, double out_max)
@@ -37,8 +37,10 @@ void setup()
   nh.initNode();
   nh.subscribe(sub);
   pinMode(SERVO_PIN, OUTPUT);
+  pinMode(SERVO_PIN1, OUTPUT);
 
   myservo.attach(SERVO_PIN); // PWM pin
+  myservo1.attach(SERVO_PIN1);
   delay(1000);
   
 }
