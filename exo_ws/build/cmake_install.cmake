@@ -143,12 +143,12 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/david/exo_ws/build/rosserial/rosserial_xbee/cmake_install.cmake")
   include("/home/david/exo_ws/build/rosserial/rosserial_client/cmake_install.cmake")
   include("/home/david/exo_ws/build/servo_control/cmake_install.cmake")
-  include("/home/david/exo_ws/build/skin_control/cmake_install.cmake")
   include("/home/david/exo_ws/build/rosserial/rosserial_server/cmake_install.cmake")
   include("/home/david/exo_ws/build/rosserial/rosserial_embeddedlinux/cmake_install.cmake")
   include("/home/david/exo_ws/build/rosserial/rosserial_test/cmake_install.cmake")
   include("/home/david/exo_ws/build/rosserial/rosserial_windows/cmake_install.cmake")
   include("/home/david/exo_ws/build/exo_control/cmake_install.cmake")
+  include("/home/david/exo_ws/build/skin_control/cmake_install.cmake")
 
 endif()
 

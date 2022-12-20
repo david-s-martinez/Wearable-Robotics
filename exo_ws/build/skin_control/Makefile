@@ -167,6 +167,48 @@ depend:
 	cd /home/david/exo_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+# Convenience name for target.
+skin_control/CMakeFiles/skin_control.dir/rule:
+	cd /home/david/exo_ws/build && $(MAKE) -f CMakeFiles/Makefile2 skin_control/CMakeFiles/skin_control.dir/rule
+.PHONY : skin_control/CMakeFiles/skin_control.dir/rule
+
+# Convenience name for target.
+skin_control: skin_control/CMakeFiles/skin_control.dir/rule
+
+.PHONY : skin_control
+
+# fast build rule for target.
+skin_control/fast:
+	cd /home/david/exo_ws/build && $(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/build
+.PHONY : skin_control/fast
+
+src/Applications/main_skin_control.o: src/Applications/main_skin_control.cpp.o
+
+.PHONY : src/Applications/main_skin_control.o
+
+# target to build an object file
+src/Applications/main_skin_control.cpp.o:
+	cd /home/david/exo_ws/build && $(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/src/Applications/main_skin_control.cpp.o
+.PHONY : src/Applications/main_skin_control.cpp.o
+
+src/Applications/main_skin_control.i: src/Applications/main_skin_control.cpp.i
+
+.PHONY : src/Applications/main_skin_control.i
+
+# target to preprocess a source file
+src/Applications/main_skin_control.cpp.i:
+	cd /home/david/exo_ws/build && $(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/src/Applications/main_skin_control.cpp.i
+.PHONY : src/Applications/main_skin_control.cpp.i
+
+src/Applications/main_skin_control.s: src/Applications/main_skin_control.cpp.s
+
+.PHONY : src/Applications/main_skin_control.s
+
+# target to generate assembly for a file
+src/Applications/main_skin_control.cpp.s:
+	cd /home/david/exo_ws/build && $(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/src/Applications/main_skin_control.cpp.s
+.PHONY : src/Applications/main_skin_control.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -180,6 +222,10 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
+	@echo "... skin_control"
+	@echo "... src/Applications/main_skin_control.o"
+	@echo "... src/Applications/main_skin_control.i"
+	@echo "... src/Applications/main_skin_control.s"
 .PHONY : help
 
 

@@ -464,12 +464,12 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "rosserial/rosserial_xbee/CMakeFiles/CMakeDirectoryInformation.cmake"
   "rosserial/rosserial_client/CMakeFiles/CMakeDirectoryInformation.cmake"
   "servo_control/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "skin_control/CMakeFiles/CMakeDirectoryInformation.cmake"
   "rosserial/rosserial_server/CMakeFiles/CMakeDirectoryInformation.cmake"
   "rosserial/rosserial_embeddedlinux/CMakeFiles/CMakeDirectoryInformation.cmake"
   "rosserial/rosserial_test/CMakeFiles/CMakeDirectoryInformation.cmake"
   "rosserial/rosserial_windows/CMakeFiles/CMakeDirectoryInformation.cmake"
   "exo_control/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "skin_control/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -632,4 +632,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "exo_control/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/DependInfo.cmake"
   "exo_control/CMakeFiles/tum_ics_skin_msgs_generate_messages_py.dir/DependInfo.cmake"
   "exo_control/CMakeFiles/exo_control_generate_messages_eus.dir/DependInfo.cmake"
+  "skin_control/CMakeFiles/skin_control.dir/DependInfo.cmake"
   )

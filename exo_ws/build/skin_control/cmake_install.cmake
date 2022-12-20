@@ -52,3 +52,27 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/skin_control" TYPE FILE FILES "/home/david/exo_ws/src/skin_control/package.xml")
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/skin_control/skin_control" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/skin_control/skin_control")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/skin_control/skin_control"
+         RPATH "/opt/ros/noetic/lib:/usr/lib/tumskin:/usr/lib/tumtools")
+  endif()
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/skin_control" TYPE EXECUTABLE FILES "/home/david/exo_ws/devel/lib/skin_control/skin_control")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/skin_control/skin_control" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/skin_control/skin_control")
+    file(RPATH_CHANGE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/skin_control/skin_control"
+         OLD_RPATH "/opt/ros/noetic/lib:/usr/lib/tumskin:/usr/lib/tumtools:"
+         NEW_RPATH "/opt/ros/noetic/lib:/usr/lib/tumskin:/usr/lib/tumtools")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/skin_control/skin_control")
+    endif()
+  endif()
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/skin_control/launch" TYPE DIRECTORY FILES "/home/david/exo_ws/src/skin_control/launch/")
+endif()
+

@@ -2221,6 +2221,19 @@ exo_control_generate_messages_eus/fast:
 	$(MAKE) -f exo_control/CMakeFiles/exo_control_generate_messages_eus.dir/build.make exo_control/CMakeFiles/exo_control_generate_messages_eus.dir/build
 .PHONY : exo_control_generate_messages_eus/fast
 
+#=============================================================================
+# Target rules for targets named skin_control
+
+# Build rule for target.
+skin_control: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 skin_control
+.PHONY : skin_control
+
+# fast build rule for target.
+skin_control/fast:
+	$(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/build
+.PHONY : skin_control/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2392,6 +2405,7 @@ help:
 	@echo "... visualization_msgs_generate_messages_cpp"
 	@echo "... tum_ics_skin_msgs_generate_messages_py"
 	@echo "... exo_control_generate_messages_eus"
+	@echo "... skin_control"
 .PHONY : help
 
 

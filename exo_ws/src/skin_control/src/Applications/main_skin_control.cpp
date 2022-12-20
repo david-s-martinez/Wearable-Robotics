@@ -42,6 +42,7 @@ int main( int argc, char** argv )
 
         ROS_WARN_STREAM(acc);
         */
+        std::cout << tfPatches.patch(0)->dataFromId(2).cellId<< "\n";
         ros::spinOnce();
         r.sleep();
     }

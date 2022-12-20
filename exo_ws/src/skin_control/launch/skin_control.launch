@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-<arg name="PATCH_ID" default="0"/> <!-- This is the id of the desired patch. If you set it to "0" then it will load the first patch in the config file what ever id this patch has!/-->
+<arg name="PATCH_ID" default="1"/> <!-- This is the id of the desired patch. If you set it to "0" then it will load the first patch in the config file what ever id this patch has!/-->
 <arg name="CONFIG_PATH" default="$(find skin_control)/launch/config"/><!--Default PATH for the skin config dialog (The path were you saved the config file created previously with roslaunch tum_ics_skin_full_config_fiad full_config.launch)-->
-<arg name="FILE_DIALOG" default="false"/>  <!-- if only path is specified: always open file dialog /-->
+<arg name="FILE_DIALOG" default="false"/>  <!-- if only path is specified: always open file dial /-->
 
 <node name="skin_control"
       pkg="skin_control"

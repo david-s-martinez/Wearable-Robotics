@@ -66,12 +66,12 @@ all: rosserial/rosserial_vex_v5/all
 all: rosserial/rosserial_xbee/all
 all: rosserial/rosserial_client/all
 all: servo_control/all
-all: skin_control/all
 all: rosserial/rosserial_server/all
 all: rosserial/rosserial_embeddedlinux/all
 all: rosserial/rosserial_test/all
 all: rosserial/rosserial_windows/all
 all: exo_control/all
+all: skin_control/all
 
 .PHONY : all
 
@@ -89,12 +89,12 @@ preinstall: rosserial/rosserial_vex_v5/preinstall
 preinstall: rosserial/rosserial_xbee/preinstall
 preinstall: rosserial/rosserial_client/preinstall
 preinstall: servo_control/preinstall
-preinstall: skin_control/preinstall
 preinstall: rosserial/rosserial_server/preinstall
 preinstall: rosserial/rosserial_embeddedlinux/preinstall
 preinstall: rosserial/rosserial_test/preinstall
 preinstall: rosserial/rosserial_windows/preinstall
 preinstall: exo_control/preinstall
+preinstall: skin_control/preinstall
 
 .PHONY : preinstall
 
@@ -117,12 +117,12 @@ clean: rosserial/rosserial_vex_v5/clean
 clean: rosserial/rosserial_xbee/clean
 clean: rosserial/rosserial_client/clean
 clean: servo_control/clean
-clean: skin_control/clean
 clean: rosserial/rosserial_server/clean
 clean: rosserial/rosserial_embeddedlinux/clean
 clean: rosserial/rosserial_test/clean
 clean: rosserial/rosserial_windows/clean
 clean: exo_control/clean
+clean: skin_control/clean
 
 .PHONY : clean
 
@@ -636,7 +636,7 @@ servo_control/clean: servo_control/CMakeFiles/rosgraph_msgs_generate_messages_py
 # Directory level rules for directory skin_control
 
 # Recursive "all" directory target.
-skin_control/all:
+skin_control/all: skin_control/CMakeFiles/skin_control.dir/all
 
 .PHONY : skin_control/all
 
@@ -646,7 +646,7 @@ skin_control/preinstall:
 .PHONY : skin_control/preinstall
 
 # Recursive "clean" directory target.
-skin_control/clean:
+skin_control/clean: skin_control/CMakeFiles/skin_control.dir/clean
 
 .PHONY : skin_control/clean
 
@@ -2293,7 +2293,7 @@ rosserial/rosserial_client/CMakeFiles/run_tests_rosserial_client_gtest_subscribe
 rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/build.make rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/depend
 	$(MAKE) -f rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/build.make rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/david/exo_ws/build/CMakeFiles --progress-num=69,70 "Built target subscriber_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/david/exo_ws/build/CMakeFiles --progress-num=71,72 "Built target subscriber_test"
 .PHONY : rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2320,7 +2320,7 @@ rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/clean:
 rosserial/rosserial_client/CMakeFiles/time_test.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f rosserial/rosserial_client/CMakeFiles/time_test.dir/build.make rosserial/rosserial_client/CMakeFiles/time_test.dir/depend
 	$(MAKE) -f rosserial/rosserial_client/CMakeFiles/time_test.dir/build.make rosserial/rosserial_client/CMakeFiles/time_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/david/exo_ws/build/CMakeFiles --progress-num=71,72,73,74 "Built target time_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/david/exo_ws/build/CMakeFiles --progress-num=73,74,75,76 "Built target time_test"
 .PHONY : rosserial/rosserial_client/CMakeFiles/time_test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -5074,6 +5074,52 @@ exo_control_generate_messages_eus: exo_control/CMakeFiles/exo_control_generate_m
 exo_control/CMakeFiles/exo_control_generate_messages_eus.dir/clean:
 	$(MAKE) -f exo_control/CMakeFiles/exo_control_generate_messages_eus.dir/build.make exo_control/CMakeFiles/exo_control_generate_messages_eus.dir/clean
 .PHONY : exo_control/CMakeFiles/exo_control_generate_messages_eus.dir/clean
+
+#=============================================================================
+# Target rules for target skin_control/CMakeFiles/skin_control.dir
+
+# All Build rule for target.
+skin_control/CMakeFiles/skin_control.dir/all: servo_control/CMakeFiles/std_msgs_generate_messages_py.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: servo_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: servo_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: servo_control/CMakeFiles/std_msgs_generate_messages_eus.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: servo_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/sensor_msgs_generate_messages_eus.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/geometry_msgs_generate_messages_eus.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/sensor_msgs_generate_messages_py.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: rosserial/rosserial_windows/CMakeFiles/geometry_msgs_generate_messages_py.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: exo_control/CMakeFiles/tum_ics_skin_msgs_generate_messages_eus.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: exo_control/CMakeFiles/tum_ics_skin_msgs_generate_messages_lisp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: exo_control/CMakeFiles/tum_ics_skin_msgs_generate_messages_cpp.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: exo_control/CMakeFiles/tum_ics_skin_msgs_generate_messages_nodejs.dir/all
+skin_control/CMakeFiles/skin_control.dir/all: exo_control/CMakeFiles/tum_ics_skin_msgs_generate_messages_py.dir/all
+	$(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/depend
+	$(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/david/exo_ws/build/CMakeFiles --progress-num=69,70 "Built target skin_control"
+.PHONY : skin_control/CMakeFiles/skin_control.dir/all
+
+# Build rule for subdir invocation for target.
+skin_control/CMakeFiles/skin_control.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/david/exo_ws/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 skin_control/CMakeFiles/skin_control.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/david/exo_ws/build/CMakeFiles 0
+.PHONY : skin_control/CMakeFiles/skin_control.dir/rule
+
+# Convenience name for target.
+skin_control: skin_control/CMakeFiles/skin_control.dir/rule
+
+.PHONY : skin_control
+
+# clean rule for target.
+skin_control/CMakeFiles/skin_control.dir/clean:
+	$(MAKE) -f skin_control/CMakeFiles/skin_control.dir/build.make skin_control/CMakeFiles/skin_control.dir/clean
+.PHONY : skin_control/CMakeFiles/skin_control.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
