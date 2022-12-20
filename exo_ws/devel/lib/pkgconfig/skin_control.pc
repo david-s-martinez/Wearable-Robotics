@@ -1,0 +1,8 @@
+prefix=/home/david/exo_ws/devel
+
+Name: skin_control
+Description: Description of skin_control
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

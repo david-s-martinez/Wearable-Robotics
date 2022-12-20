@@ -1,0 +1,8 @@
+prefix=/home/david/exo_ws/install
+
+Name: exo_control
+Description: Description of exo_control
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: roscpp tum_ics_params std_msgs message_runtime tf2 tf2_ros tum_ics_tfs tum_ics_skin_msgs tum_ics_skin_bridge tum_ics_skin_descr
