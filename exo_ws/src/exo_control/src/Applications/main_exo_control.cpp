@@ -1,8 +1,17 @@
 #include "ros/ros.h"
 #include "std_msgs/Float32.h"
+
+#include "std_msgs/String.h"
+#include "std_msgs/Int32.h"
+
+#include <tum_ics_skin_descr/Patch/TfMarkerDataPatches.h>
+
+#include <tum_ics_skin_msgs/SkinCellDataArray.h>
 #include <exo_control/exo_pos_control.h>
 #include <iostream>
 #include <cmath>
+#include <typeinfo>
+
 double deg2rad(double degree){
     return (degree * 3.14159265359/180);
 }
@@ -11,7 +20,31 @@ double rad2deg(double radian)
     double pi = 3.14159;
     return(radian * (180 / pi));
 }
+void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
+{
+//   ROS_INFO("I heard: [%i]", msg.data(0).cellId);
+    // int id = msg.data[0].cellId;
+    // std::cout << id << "\n";
+    double acc_arr[4];
+    if(msg.data[0].cellId == 10){
+        for(int i = 0; i <= 3; i++){
+            if(i==0){
+                acc_arr[i] =msg.data[0].cellId;
+            }
+            else{
 
+                acc_arr[i] =msg.data[0].acc[i-1];
+            } 
+            // std::cout << "%f",acc_arr[i] ;
+            std::cout << acc_arr[i]<< ",";
+
+        }
+
+    std::cout <<"\n";
+    }
+    
+    // std::cout << msg<< "\n";
+}
 int main( int argc, char** argv )
 {
   
@@ -19,6 +52,9 @@ int main( int argc, char** argv )
             // ,ros::init_options::AnonymousName);
     ros::NodeHandle n;
     // ros::Rate r(200);
+    // ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
+
+    ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
     ros::Publisher servo_pub = n.advertise<std_msgs::Float32>("servo", 10);
     ros::Rate loop_rate(200);
     double delta_t = 1/(double)100; 
@@ -108,7 +144,7 @@ int main( int argc, char** argv )
         std::cout << "nan found";
         break;
         }
-        std::cout << rad2deg(q1)<< "\n";
+        // std::cout << rad2deg(q1)<< "\n";
         // ROS_WARN_STREAM("q1"<<q1);
         servo_pub.publish(q1_);
         ros::spinOnce();

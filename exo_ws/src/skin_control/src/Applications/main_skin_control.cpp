@@ -42,7 +42,14 @@ int main( int argc, char** argv )
 
         ROS_WARN_STREAM(acc);
         */
-        std::cout << tfPatches.patch(0)->dataFromId(2).cellId<< "\n";
+        // std::cout << tfPatches.patch(0)->dataFromId(9).cellId<< "\n";
+//         void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
+// {
+// //   ROS_INFO("I heard: [%i]", msg.data(0).cellId);
+
+//     std::cout << msg.data(0).cellId<< "\n";
+// }
+        std::cout << tfPatches.patch(0)->dataFromId(10).prox.at(0)<< "\n";
         ros::spinOnce();
         r.sleep();
     }
