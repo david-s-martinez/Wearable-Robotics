@@ -13,14 +13,6 @@
 #include <cmath>
 #include <typeinfo>
 
-double deg2rad(double degree){
-    return (degree * 3.14159265359/180);
-}
-double rad2deg(double radian)
-{
-    double pi = 3.14159;
-    return(radian * (180 / pi));
-}
 // class ExoControl
 // {
 // public:
@@ -60,14 +52,25 @@ double rad2deg(double radian)
 //         // std::cout << msg<< "\n";
 // }
 // };
+double deg2rad(double degree){
+    return (degree * 3.14159265359/180);
+}
+double rad2deg(double radian)
+{
+    double pi = 3.14159;
+    return(radian * (180 / pi));
+}
 double acc_arr[4];
 void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
-//   ROS_INFO("I heard: [%i]", msg.data(0).cellId);
+    // get id from sent data
     int id = msg.data[0].cellId;
     // std::cout << id << "\n";
     // double acc_arr[4];
+    // if cell is the one we want
     if(msg.data[0].cellId == 10){
+        
+        // add the cell id first and then the acc values
         for(int i = 0; i <= 3; i++){
             if(i==0){
                 acc_arr[i] =msg.data[0].cellId;
@@ -76,7 +79,6 @@ void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
 
                 acc_arr[i] =msg.data[0].acc[i-1];
             } 
-            // std::cout << "%f",acc_arr[i] ;
             // std::cout << acc_arr[i]<< ",";
 
         }
@@ -84,19 +86,15 @@ void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
     // std::cout <<"\n";
     }
     
-    // std::cout << msg<< "\n";
+    // // std::cout << msg<< "\n";
 }
 int main( int argc, char** argv )
 {
   
     ros::init(argc, argv, "servo",ros::init_options::AnonymousName);
-            // ,ros::init_options::AnonymousName);
+            
     ros::NodeHandle n;
-    // ros::Rate r(200);
-    // ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
-
     // ExoControl exo(n);
-    
     ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
     ros::Publisher servo_pub = n.advertise<std_msgs::Float32>("servo", 10);
     ros::Rate loop_rate(200);
@@ -184,6 +182,8 @@ int main( int argc, char** argv )
         b_matrix = b1*qd1;
         //call force control update
         // tau = forceControl.update(Ws) + g_matrix;
+
+        //call pos control update
         tau = posControl.update(delta_t,q1,qd1,qdd1);
         // calculate qdd1 and integrate 
         qdd1=(tau- b_matrix*qd1 - g_matrix - c_matrix*qd1)/m_matrix;
@@ -191,17 +191,13 @@ int main( int argc, char** argv )
         q1 = delta_t *qd1 + q1;
         std_msgs::Float32 q1_;
         q1_.data = rad2deg(q1);
-        // ROS_WARN_STREAM("qdd1"<<qdd1);
-        //ROS_WARN_STREAM("qd1"<<qd1);
+
         if (isnan(q1)&& rad2deg(q1) <= 0.0 ){
         std::cout << "nan found";
         break;
         }
-        // std::cout << rad2deg(q1)<< "\n";
-        // ROS_WARN_STREAM("q1"<<q1);
         servo_pub.publish(q1_);
         ros::spinOnce();
-        // r.sleep();
         loop_rate.sleep();
     }
     
