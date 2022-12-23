@@ -55,12 +55,31 @@
 double deg2rad(double degree){
     return (degree * 3.14159265359/180);
 }
+double control_q1(double q1, double force,double force1 ){
+
+    if(q1>0){
+            if (force>force1){
+                q1--;
+            }
+
+        }
+        
+
+    if(q1<180 ){
+        if(force1>force){
+            
+            q1++;
+        }
+    }
+    return q1;
+}
 double rad2deg(double radian)
 {
     double pi = 3.14159;
     return(radian * (180 / pi));
 }
 double acc_arr[4];
+double acc_arr1[4];
 void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
     // get id from sent data
@@ -77,16 +96,40 @@ void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
             }
             else{
 
-                acc_arr[i] =msg.data[0].acc[i-1];
+                acc_arr[i] =msg.data[0].force[i-1];
             } 
             // std::cout << acc_arr[i]<< ",";
 
         }
+    
+    
 
     // std::cout <<"\n";
     }
-    
     // // std::cout << msg<< "\n";
+}
+void chatterCallback1(const tum_ics_skin_msgs::SkinCellDataArray msg)
+{
+    // get id from sent data
+    int id = msg.data[0].cellId;
+    // std::cout << id << "\n";
+    // double acc_arr[4];
+    // if cell is the one we want
+    if(msg.data[0].cellId == 6){
+        
+        // add the cell id first and then the acc values
+        for(int i = 0; i <= 3; i++){
+            if(i==0){
+                acc_arr1[i] =msg.data[0].cellId;
+            }
+            else{
+
+                acc_arr1[i] =msg.data[0].force[i-1];
+            } 
+            // std::cout << acc_arr[i]<< ",";
+
+            }
+    }
 }
 int main( int argc, char** argv )
 {
@@ -96,9 +139,11 @@ int main( int argc, char** argv )
     ros::NodeHandle n;
     // ExoControl exo(n);
     ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
+    ros::Subscriber skin_sub1 = n.subscribe("patch2", 10,chatterCallback1);
+
     ros::Publisher servo_pub = n.advertise<std_msgs::Float32>("servo", 10);
     ros::Rate loop_rate(200);
-    double delta_t = 1/(double)100; 
+    double delta_t = 1/(double)200; 
 
     // load your params
     double L1;
@@ -162,8 +207,8 @@ int main( int argc, char** argv )
     
     ExoControllers::PosControl posControl(L1, L2, m2, b1, k1, theta1, gx, gy);
     Vector3d qEnd;
-    qEnd << deg2rad(-180),0.0,0.0;
-    double timeEnd = 5;
+    qEnd << deg2rad(180),0.0,0.0;
+    double timeEnd = 1;
     posControl.init(qEnd,timeEnd);
 
     //load force control
@@ -171,15 +216,23 @@ int main( int argc, char** argv )
     double W_des = 0;
     double Ws = 0;
     forceControl.init(W_des);
+    
+    std_msgs::Float32 q1_;
+    q1_.data = 0;
+    servo_pub.publish(q1_);
+    ros::spinOnce();
+    loop_rate.sleep();
+    
     while(ros::ok())
     {   
         // double* message_data = exo.getMessageData();
         // std::cout << message_data[1]<< "\n";
         std::cout << acc_arr[2]<< "\n";
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
-        c_matrix = -1.5*L1*L2*m2*sin(q1)*qd1;
+        // c_matrix = -1.5*L1*L2*m2*sin(q1)*qd1; wrong
+        c_matrix = 0;
         g_matrix = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
-        b_matrix = b1*qd1;
+        b_matrix = b1;
         //call force control update
         // tau = forceControl.update(Ws) + g_matrix;
 
@@ -189,6 +242,12 @@ int main( int argc, char** argv )
         qdd1=(tau- b_matrix*qd1 - g_matrix - c_matrix*qd1)/m_matrix;
         qd1 = delta_t *qdd1 + qd1;
         q1 = delta_t *qd1 + q1;
+        
+        // double force = acc_arr[1];
+        // double force1 = acc_arr1[1];
+        // q1 = control_q1(q1,force,force1);
+
+        std::cout << rad2deg(q1)<< "\n";
         std_msgs::Float32 q1_;
         q1_.data = rad2deg(q1);
 
@@ -201,6 +260,24 @@ int main( int argc, char** argv )
         loop_rate.sleep();
     }
     
-    return 0; 
+//      while(ros::ok())
+//     {   
+        
+//         double force = acc_arr[1];
+//         double force1 = acc_arr1[1];
+//         q1 = control_q1(q1,force,force1);
+//         std::cout << q1<< "\n";
+//         std_msgs::Float32 q1_;
+//         q1_.data = q1;
+
+//         if (isnan(q1)&& rad2deg(q1) <= 0.0 ){
+//         std::cout << "nan found";
+//         break;
+//         }
+//         servo_pub.publish(q1_);
+//         ros::spinOnce();
+//         loop_rate.sleep();
+//     }
+//     return 0; 
 
 }

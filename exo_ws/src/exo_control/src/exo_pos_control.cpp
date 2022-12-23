@@ -100,19 +100,20 @@ namespace ExoControllers{
     // 4. regressor
     double PosControl::YrTheta(double q1, double qd1, double qd1r, double qdd1r)
     {
-        MatrixXd Yr(1,4);   //to DO,)
-        MatrixXd Theta(4,1);//to DO,1);
+        // include damp. in controller 
+        MatrixXd Yr(1,5);   //to DO,)
+        MatrixXd Theta(5,1);//to DO,1);
 
         Yr(0,0) = qdd1r;
         Yr(0,1) = q1; //to Do! 
         Yr(0,2) = -1;
         Yr(0,3) = (m_gy*cos(q1)-m_gx*sin(q1))/2;
-
+        Yr(0,4) = qd1r;
         Theta(0,0) = m_I233 + pow(m_L2,2)*m_m2/4; // to Do
         Theta(1,0) = m_k1;
         Theta(2,0) = m_k1 * m_theta1;
         Theta(3,0) = m_L2*m_m2;
-        
+        Theta(4,0) = m_b1;
 
         MatrixXd taor = Yr*Theta; 
         return taor(0,0);
@@ -146,8 +147,8 @@ namespace ExoControllers{
         }
 
         double deltaQ = q1 - m_q_des;
-        double deltaQd = - m_kp*deltaQ; // to Do! 
-
+        // double deltaQd = - m_kp*deltaQ; // to Do! 
+        double deltaQd = qd1 - m_qd_des;
         double qd1r = m_qd_des - m_kp*deltaQ; // to Do!
         double qdd1r = m_qdd_des - m_kp*deltaQd; //double qdd1r = qdd1 - m_kp*deltaQd;
 
