@@ -6,14 +6,14 @@
 
 #IncludeRegexTransform: 
 
-/home/david/exo_ws/src/exo_control/include/exo_control/exo_pos_control.h
+/home/david/exo_ws/src/exo_control/include/exo_control/exo_force_control.h
 ros/ros.h
 -
 Eigen/Dense
 -
 
-/home/david/exo_ws/src/exo_control/src/exo_pos_control.cpp
-exo_control/exo_pos_control.h
+/home/david/exo_ws/src/exo_control/src/exo_force_control.cpp
+exo_control/exo_force_control.h
 -
 
 /opt/ros/noetic/include/ros/advertise_options.h

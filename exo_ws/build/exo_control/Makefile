@@ -764,6 +764,33 @@ src/Applications/main_exo_control.cpp.s:
 	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/exo_control.dir/build.make exo_control/CMakeFiles/exo_control.dir/src/Applications/main_exo_control.cpp.s
 .PHONY : src/Applications/main_exo_control.cpp.s
 
+src/exo_force_control.o: src/exo_force_control.cpp.o
+
+.PHONY : src/exo_force_control.o
+
+# target to build an object file
+src/exo_force_control.cpp.o:
+	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/src/exo_force_control.cpp.o
+.PHONY : src/exo_force_control.cpp.o
+
+src/exo_force_control.i: src/exo_force_control.cpp.i
+
+.PHONY : src/exo_force_control.i
+
+# target to preprocess a source file
+src/exo_force_control.cpp.i:
+	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/src/exo_force_control.cpp.i
+.PHONY : src/exo_force_control.cpp.i
+
+src/exo_force_control.s: src/exo_force_control.cpp.s
+
+.PHONY : src/exo_force_control.s
+
+# target to generate assembly for a file
+src/exo_force_control.cpp.s:
+	cd /home/david/exo_ws/build && $(MAKE) -f exo_control/CMakeFiles/ExoControllers.dir/build.make exo_control/CMakeFiles/ExoControllers.dir/src/exo_force_control.cpp.s
+.PHONY : src/exo_force_control.cpp.s
+
 src/exo_pos_control.o: src/exo_pos_control.cpp.o
 
 .PHONY : src/exo_pos_control.o
@@ -845,6 +872,9 @@ help:
 	@echo "... src/Applications/main_exo_control.o"
 	@echo "... src/Applications/main_exo_control.i"
 	@echo "... src/Applications/main_exo_control.s"
+	@echo "... src/exo_force_control.o"
+	@echo "... src/exo_force_control.i"
+	@echo "... src/exo_force_control.s"
 	@echo "... src/exo_pos_control.o"
 	@echo "... src/exo_pos_control.i"
 	@echo "... src/exo_pos_control.s"

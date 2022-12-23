@@ -101,7 +101,9 @@ include_directories(
 file(GLOB_RECURSE MY_CTRL_INC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS
         include/*.h)
 
-add_library(ExoControllers src/exo_pos_control.cpp
+add_library(ExoControllers 
+src/exo_force_control.cpp
+src/exo_pos_control.cpp
     ${MY_CTRL_INC}
 )
 

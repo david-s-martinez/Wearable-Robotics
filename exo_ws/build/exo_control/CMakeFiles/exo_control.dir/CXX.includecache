@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/home/david/exo_ws/src/exo_control/include/exo_control/exo_force_control.h
+ros/ros.h
+-
+Eigen/Dense
+-
+
 /home/david/exo_ws/src/exo_control/include/exo_control/exo_pos_control.h
 ros/ros.h
 -
@@ -26,6 +32,8 @@ tum_ics_skin_descr/Patch/TfMarkerDataPatches.h
 tum_ics_skin_msgs/SkinCellDataArray.h
 -
 exo_control/exo_pos_control.h
+-
+exo_control/exo_force_control.h
 -
 iostream
 -

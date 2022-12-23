@@ -8,6 +8,7 @@
 
 #include <tum_ics_skin_msgs/SkinCellDataArray.h>
 #include <exo_control/exo_pos_control.h>
+#include <exo_control/exo_force_control.h>
 #include <iostream>
 #include <cmath>
 #include <typeinfo>
@@ -20,12 +21,52 @@ double rad2deg(double radian)
     double pi = 3.14159;
     return(radian * (180 / pi));
 }
+// class ExoControl
+// {
+// public:
+//     ExoControl(ros::NodeHandle n){
+//         ros::Subscriber skin_sub = n.subscribe("patch1", 10,&ExoControl::chatterCallback,this);
+    
+//     }
+//     double* getMessageData()
+//   {
+//     return acc_arr;
+//   }
+//     double acc_arr[4];
+
+//     void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
+//     {
+//         // double acc_arr[4];
+//         int id = msg.data[0].cellId;
+//         // std::cout << id << "\n";
+        
+//         if(msg.data[0].cellId == 10){
+//             for(int i = 0; i <= 3; i++){
+//                 if(i==0){
+//                     acc_arr[i] =msg.data[0].cellId;
+//                 }
+//                 else{
+
+//                     acc_arr[i] =msg.data[0].acc[i-1];
+//                 } 
+//                 // std::cout << "%f",acc_arr[i] ;
+//                 std::cout << acc_arr[i]<< ",";
+
+//             }
+
+//         std::cout <<"\n";
+//         }
+        
+//         // std::cout << msg<< "\n";
+// }
+// };
+double acc_arr[4];
 void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
 //   ROS_INFO("I heard: [%i]", msg.data(0).cellId);
-    // int id = msg.data[0].cellId;
+    int id = msg.data[0].cellId;
     // std::cout << id << "\n";
-    double acc_arr[4];
+    // double acc_arr[4];
     if(msg.data[0].cellId == 10){
         for(int i = 0; i <= 3; i++){
             if(i==0){
@@ -36,11 +77,11 @@ void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
                 acc_arr[i] =msg.data[0].acc[i-1];
             } 
             // std::cout << "%f",acc_arr[i] ;
-            std::cout << acc_arr[i]<< ",";
+            // std::cout << acc_arr[i]<< ",";
 
         }
 
-    std::cout <<"\n";
+    // std::cout <<"\n";
     }
     
     // std::cout << msg<< "\n";
@@ -54,6 +95,8 @@ int main( int argc, char** argv )
     // ros::Rate r(200);
     // ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
 
+    // ExoControl exo(n);
+    
     ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
     ros::Publisher servo_pub = n.advertise<std_msgs::Float32>("servo", 10);
     ros::Rate loop_rate(200);
@@ -124,15 +167,25 @@ int main( int argc, char** argv )
     qEnd << deg2rad(-180),0.0,0.0;
     double timeEnd = 5;
     posControl.init(qEnd,timeEnd);
+
+    //load force control
+    ExoControllers::ForceControl forceControl(L2);
+    double W_des = 0;
+    double Ws = 0;
+    forceControl.init(W_des);
     while(ros::ok())
-    {        
+    {   
+        // double* message_data = exo.getMessageData();
+        // std::cout << message_data[1]<< "\n";
+        std::cout << acc_arr[2]<< "\n";
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
         c_matrix = -1.5*L1*L2*m2*sin(q1)*qd1;
         g_matrix = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
         b_matrix = b1*qd1;
-        
-        // calculate qdd1 and integrate 
+        //call force control update
+        // tau = forceControl.update(Ws) + g_matrix;
         tau = posControl.update(delta_t,q1,qd1,qdd1);
+        // calculate qdd1 and integrate 
         qdd1=(tau- b_matrix*qd1 - g_matrix - c_matrix*qd1)/m_matrix;
         qd1 = delta_t *qdd1 + qd1;
         q1 = delta_t *qd1 + q1;
