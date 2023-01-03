@@ -227,25 +227,39 @@ int main( int argc, char** argv )
     {   
         // double* message_data = exo.getMessageData();
         // std::cout << message_data[1]<< "\n";
-        std::cout << acc_arr[2]<< "\n";
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
         // c_matrix = -1.5*L1*L2*m2*sin(q1)*qd1; wrong
         c_matrix = 0;
         g_matrix = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
         b_matrix = b1;
+        
+        // Proportianal force control
+        // double force = acc_arr[1];
+        // double force1 = acc_arr1[1];
+        // q1 = control_q1(q1,force,force1);
+        
         //call force control update
-        // tau = forceControl.update(Ws) + g_matrix;
+        Ws = (acc_arr1[1]-acc_arr[1])/0.09;
+        // if(Ws > 0.3 || Ws < -0.3){
+        //     tau = forceControl.update(Ws) + g_matrix;
+
+        // }
+        // else if (Ws < 0.3 && Ws > -0.3 ){
+        //     Ws = 0.0;
+        //     // tau = 0.0;
+        // }
+        std::cout << Ws << "\n";
+        // std::cout << Ws << "\n";
+        tau = forceControl.update(Ws) + g_matrix;
 
         //call pos control update
-        tau = posControl.update(delta_t,q1,qd1,qdd1);
+        // tau = posControl.update(delta_t,q1,qd1,qdd1);
+
         // calculate qdd1 and integrate 
         qdd1=(tau- b_matrix*qd1 - g_matrix - c_matrix*qd1)/m_matrix;
         qd1 = delta_t *qdd1 + qd1;
         q1 = delta_t *qd1 + q1;
-        
-        // double force = acc_arr[1];
-        // double force1 = acc_arr1[1];
-        // q1 = control_q1(q1,force,force1);
+
 
         std::cout << rad2deg(q1)<< "\n";
         std_msgs::Float32 q1_;
