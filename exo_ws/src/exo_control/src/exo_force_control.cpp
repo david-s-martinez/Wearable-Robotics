@@ -36,7 +36,7 @@ namespace ExoControllers{
             m_startFlag = true;
         }
 
-        m_tao = m_L2 * Ws; // to DO
+        m_tao = m_L2 * m_kp * (Ws - m_W_des); // to DO
 
         return m_tao;
     }

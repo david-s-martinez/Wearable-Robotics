@@ -84,51 +84,43 @@ void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
     // get id from sent data
     int id = msg.data[0].cellId;
-    // std::cout << id << "\n";
     // double acc_arr[4];
     // if cell is the one we want
+    
     if(msg.data[0].cellId == 10){
-        
-        // add the cell id first and then the acc values
-        for(int i = 0; i <= 3; i++){
+        // for(int i = 0; i <= 3; i++){
+        for(int i = 0; i <= 1; i++){
             if(i==0){
                 acc_arr[i] =msg.data[0].cellId;
             }
             else{
 
-                acc_arr[i] =msg.data[0].force[i-1];
+                // acc_arr[i] =msg.data[0].force[i-1];
+                acc_arr[i] =msg.data[0].prox[i-1];
             } 
-            // std::cout << acc_arr[i]<< ",";
 
         }
-    
-    
-
-    // std::cout <<"\n";
     }
-    // // std::cout << msg<< "\n";
 }
 void chatterCallback1(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
     // get id from sent data
     int id = msg.data[0].cellId;
-    // std::cout << id << "\n";
-    // double acc_arr[4];
     // if cell is the one we want
     if(msg.data[0].cellId == 6){
         
-        // add the cell id first and then the acc values
-        for(int i = 0; i <= 3; i++){
+        // for(int i = 0; i <= 3; i++){
+        for(int i = 0; i <= 1; i++){
             if(i==0){
                 acc_arr1[i] =msg.data[0].cellId;
             }
             else{
 
-                acc_arr1[i] =msg.data[0].force[i-1];
+                // acc_arr1[i] =msg.data[0].force[i-1];
+                acc_arr1[i] =msg.data[0].prox[i-1];
             } 
-            // std::cout << acc_arr[i]<< ",";
 
-            }
+        }
     }
 }
 int main( int argc, char** argv )
@@ -205,6 +197,7 @@ int main( int argc, char** argv )
     double g_matrix;
     double b_matrix;
     
+    //load force control
     ExoControllers::PosControl posControl(L1, L2, m2, b1, k1, theta1, gx, gy);
     Vector3d qEnd;
     qEnd << deg2rad(180),0.0,0.0;
@@ -227,19 +220,33 @@ int main( int argc, char** argv )
     {   
         // double* message_data = exo.getMessageData();
         // std::cout << message_data[1]<< "\n";
+        
+        // keeping values in desired range
+        if(q1 > deg2rad(180.0)){
+            q1 = deg2rad(180.0);
+        }
+        else if(q1 < 0.0 ){
+            q1 = 0.0;
+        }
+
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
         // c_matrix = -1.5*L1*L2*m2*sin(q1)*qd1; wrong
         c_matrix = 0;
         g_matrix = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
         b_matrix = b1;
+
+        double force = acc_arr[1];
+        double force1 = acc_arr1[1];
         
-        // Proportianal force control
-        // double force = acc_arr[1];
-        // double force1 = acc_arr1[1];
+        // std::cout << force << "\n";
+
+        // Proportional force control
         // q1 = control_q1(q1,force,force1);
         
         //call force control update
-        Ws = (acc_arr1[1]-acc_arr[1])/0.09;
+        Ws = (force1 - force) / 0.9;
+        
+        //weird stuff:
         // if(Ws > 0.3 || Ws < -0.3){
         //     tau = forceControl.update(Ws) + g_matrix;
 
@@ -248,8 +255,10 @@ int main( int argc, char** argv )
         //     Ws = 0.0;
         //     // tau = 0.0;
         // }
-        std::cout << Ws << "\n";
+
         // std::cout << Ws << "\n";
+
+        // force control update
         tau = forceControl.update(Ws) + g_matrix;
 
         //call pos control update
