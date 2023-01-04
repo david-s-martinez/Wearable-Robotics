@@ -221,12 +221,17 @@ int main( int argc, char** argv )
         // double* message_data = exo.getMessageData();
         // std::cout << message_data[1]<< "\n";
         
-        // keeping values in desired range
+        // keeping angular displacement values in desired range
         if(q1 > deg2rad(180.0)){
             q1 = deg2rad(180.0);
+            qd1 = 0.0;
+            qdd1 = 0.0;
         }
         else if(q1 < 0.0 ){
             q1 = 0.0;
+            qd1 = 0.0;
+            qdd1 = 0.0;
+            
         }
 
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
@@ -243,7 +248,9 @@ int main( int argc, char** argv )
         // Proportional force control
         // q1 = control_q1(q1,force,force1);
         
-        //call force control update
+
+        // Force control update
+        
         Ws = (force1 - force) / 0.9;
         
         //weird stuff:
@@ -257,8 +264,7 @@ int main( int argc, char** argv )
         // }
 
         // std::cout << Ws << "\n";
-
-        // force control update
+        //call force control update
         tau = forceControl.update(Ws) + g_matrix;
 
         //call pos control update
