@@ -29,6 +29,7 @@ namespace ExoControllers{
         return true;
     }
 
+
     double ForceControl::update(double Ws)
     {
         if(!m_startFlag)
@@ -36,9 +37,8 @@ namespace ExoControllers{
             m_startFlag = true;
         }
 
-        m_tao = 0; // to DO
+        m_tao = m_L2 * m_kp * (Ws - m_W_des); // to DO
 
         return m_tao;
     }
-
 }
