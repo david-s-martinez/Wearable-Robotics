@@ -71,7 +71,7 @@ double control_q1(double q1, double force,double force1 ){
             q1++;
         }
     }
-    return q1;
+    return deg2rad(q1);
 }
 double rad2deg(double radian)
 {
@@ -183,7 +183,7 @@ int main( int argc, char** argv )
     double tau = 0; 
     
     //init params 
-    double q1 = deg2rad(0); 
+    double q1 = deg2rad(45); 
     double qd1 = 0;
     double qdd1 = 0; 
 
@@ -200,7 +200,7 @@ int main( int argc, char** argv )
     //load force control
     ExoControllers::PosControl posControl(L1, L2, m2, b1, k1, theta1, gx, gy);
     Vector3d qEnd;
-    qEnd << deg2rad(180),0.0,0.0;
+    qEnd << deg2rad(120),0.0,0.0;
     double timeEnd = 1;
     posControl.init(qEnd,timeEnd);
 
@@ -209,9 +209,23 @@ int main( int argc, char** argv )
     double W_des = 0;
     double Ws = 0;
     forceControl.init(W_des);
-    
+    // Mode selection
+    int mode;
+    std::cout << "Enter 1 for pos_ctrl, 2 for force_ctrl, 3 for proport_ctrl, else default: ";
+    std::cin >> mode;
+    // send exo home
     std_msgs::Float32 q1_;
-    q1_.data = 0;
+    if (mode == 2 || mode == 3 ){
+        q1 = 0;
+
+    }
+    else {
+        std::cout << "Enter start angle in deg: ";
+        double start_q1 ;
+        std::cin >> start_q1;
+        q1 = deg2rad(start_q1);
+    }
+    q1_.data = q1;
     servo_pub.publish(q1_);
     ros::spinOnce();
     loop_rate.sleep();
@@ -235,7 +249,6 @@ int main( int argc, char** argv )
         }
 
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
-        // c_matrix = -1.5*L1*L2*m2*sin(q1)*qd1; wrong
         c_matrix = 0;
         g_matrix = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
         b_matrix = b1;
@@ -243,38 +256,31 @@ int main( int argc, char** argv )
         double force = acc_arr[1];
         double force1 = acc_arr1[1];
         
-        // std::cout << force << "\n";
+        if (mode == 1){
+            // call pos control update
+            tau = posControl.update(delta_t,q1,qd1,qdd1);
 
-        // Proportional force control
-        // q1 = control_q1(q1,force,force1);
-        
+        }
+        else if (mode == 2){
+            // Force control update
+            //call force control update
+            Ws = (force1 - force) / 0.9;
+            // std::cout << Ws << "\n";
+            tau = forceControl.update(Ws) + g_matrix;
+        }
 
-        // Force control update
-        
-        Ws = (force1 - force) / 0.9;
-        
-        //weird stuff:
-        // if(Ws > 0.3 || Ws < -0.3){
-        //     tau = forceControl.update(Ws) + g_matrix;
+        if (mode == 3){
+            // Proportional force control
+            q1 = control_q1(rad2deg(q1),force,force1);
 
-        // }
-        // else if (Ws < 0.3 && Ws > -0.3 ){
-        //     Ws = 0.0;
-        //     // tau = 0.0;
-        // }
-
-        // std::cout << Ws << "\n";
-        //call force control update
-        tau = forceControl.update(Ws) + g_matrix;
-
-        //call pos control update
-        // tau = posControl.update(delta_t,q1,qd1,qdd1);
-
-        // calculate qdd1 and integrate 
-        qdd1=(tau- b_matrix*qd1 - g_matrix - c_matrix*qd1)/m_matrix;
-        qd1 = delta_t *qdd1 + qd1;
-        q1 = delta_t *qd1 + q1;
-
+        }
+        else{
+            // calculate qdd1 and integrate 
+            qdd1=(tau- b_matrix*qd1 - g_matrix - c_matrix*qd1)/m_matrix;
+            qd1 = delta_t *qdd1 + qd1;
+            // Default q1 update 
+            q1 = delta_t *qd1 + q1;
+        }
 
         std::cout << rad2deg(q1)<< "\n";
         std_msgs::Float32 q1_;
@@ -288,25 +294,5 @@ int main( int argc, char** argv )
         ros::spinOnce();
         loop_rate.sleep();
     }
-    
-//      while(ros::ok())
-//     {   
-        
-//         double force = acc_arr[1];
-//         double force1 = acc_arr1[1];
-//         q1 = control_q1(q1,force,force1);
-//         std::cout << q1<< "\n";
-//         std_msgs::Float32 q1_;
-//         q1_.data = q1;
-
-//         if (isnan(q1)&& rad2deg(q1) <= 0.0 ){
-//         std::cout << "nan found";
-//         break;
-//         }
-//         servo_pub.publish(q1_);
-//         ros::spinOnce();
-//         loop_rate.sleep();
-//     }
-//     return 0; 
 
 }
