@@ -11,6 +11,12 @@
         "tuple": "cpp",
         "utility": "cpp",
         "variant": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "system_error": "cpp",
+        "iostream": "cpp"
     }
 }
