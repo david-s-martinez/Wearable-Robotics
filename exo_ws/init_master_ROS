@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Initializing ROS in raspi"
+source devel/setup.bash
+export ROS_MASTER_URI=http://10.152.246.177:11311/
+echo "ROS_MASTER_URI" $ROS_MASTER_URI
+export ROS_IP=10.152.246.177
+echo "ROS_IP" $ROS_IP
+export ROS_HOSTNAME=10.152.246.177
+echo "ROS_HOSTNAME" $ROS_HOSTNAME
+

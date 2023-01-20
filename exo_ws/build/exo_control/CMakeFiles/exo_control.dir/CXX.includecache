@@ -25,6 +25,8 @@ std_msgs/Float32MultiArray.h
 /home/david/exo_ws/src/exo_control/src/Applications/std_msgs/Float32MultiArray.h
 std_msgs/Float32.h
 /home/david/exo_ws/src/exo_control/src/Applications/std_msgs/Float32.h
+std_msgs/Float64.h
+/home/david/exo_ws/src/exo_control/src/Applications/std_msgs/Float64.h
 std_msgs/String.h
 /home/david/exo_ws/src/exo_control/src/Applications/std_msgs/String.h
 std_msgs/Int32.h
@@ -968,6 +970,22 @@ ros/builtin_message_traits.h
 ros/message_operations.h
 -
 std_msgs/MultiArrayLayout.h
+-
+
+/opt/ros/noetic/include/std_msgs/Float64.h
+string
+-
+vector
+-
+memory
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
 -
 
 /opt/ros/noetic/include/std_msgs/Header.h
