@@ -15,6 +15,7 @@
 #include <iostream>
 #include <cmath>
 #include <typeinfo>
+#include <unistd.h>
 
 // class ExoControl
 // {
@@ -260,9 +261,8 @@ int main( int argc, char** argv )
     //load force control
     ExoControllers::PosControl posControl(L1, L2, m2, b1, k1, theta1, gx, gy);
     Vector3d qEnd;
-    qEnd << deg2rad(120),0.0,0.0;
+    // qEnd << deg2rad(120),0.0,0.0;
     float timeEnd = 1;
-    posControl.init(qEnd,timeEnd);
 
     //load force control
     ExoControllers::ForceControl forceControl(L2);
@@ -273,10 +273,10 @@ int main( int argc, char** argv )
     forceControl.init(W_des);
     // Mode selection
     int mode;
-    std::cout << "Enter 1 for pos_ctrl, 2 for force_ctrl, 3 for proport_ctrl, else default: ";
+    std::cout << "Enter 1 for pos_ctrl, 2 for force_ctrl,3 for force + pos , 4 for proport_ctrl, else default: ";
     std::cin >> mode;
     // send exo home
-    if (mode == 2 || mode == 3 ){
+    if (mode == 2 || mode == 4 ){
         q1 = 0;
 
     }
@@ -285,7 +285,14 @@ int main( int argc, char** argv )
         float start_q1 ;
         std::cin >> start_q1;
         q1 = deg2rad(start_q1);
+        if (mode == 3 || mode == 1){
+            std::cout << "Enter target angle in deg: ";
+            float end_q1 ;
+            std::cin >> end_q1;
+            qEnd << deg2rad(end_q1),0.0,0.0;
+        }
     }
+    posControl.init(qEnd,timeEnd);
     
     std_msgs::Float32MultiArray q_array;
     std_msgs::Float64 q_result;
@@ -296,6 +303,8 @@ int main( int argc, char** argv )
 
     ros::spinOnce();
     loop_rate.sleep();
+    sleep(3);//sleeps for 3 second
+
     while(ros::ok())
     {   
         // float* message_data = exo.getMessageData();
@@ -352,8 +361,20 @@ int main( int argc, char** argv )
 
             tau2 = forceControl.update(Ws2) + g_matrix2;
         }
+        else if (mode == 3){
+            // Force control update
+            //call force control update
+            Ws1 = (force1 - force) / 0.9;
+            Ws2 = (force2 - force3) / 0.9;
+            
+            // std::cout << Ws1 << "\n";
+            float tau1_force = forceControl.update(Ws1) + g_matrix1;
+            float tau1_pos = posControl.update(delta_t,q1,qd1,qdd1);
+            tau1 = 3.0*tau1_force + tau1_pos;
+            tau2 = forceControl.update(Ws2) + g_matrix2;
+        }
 
-        if (mode == 3){
+        if (mode ==4){
             // Proportional force control
             q1 = control_q1(rad2deg(q1),force,force1);
             q2 = control_q1(rad2deg(q2),force2,force3);
