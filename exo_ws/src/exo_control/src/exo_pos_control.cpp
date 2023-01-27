@@ -128,7 +128,10 @@ namespace ExoControllers{
 
         return true;
     }
-
+    bool PosControl::update_target(Vector3d qEnd){
+        m_qEnd = qEnd;
+        return true;
+    }
     // 5. PD controller 
     double PosControl::update(double delta_t, double q1, double qd1, double qdd1)
     {

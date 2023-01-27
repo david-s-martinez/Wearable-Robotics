@@ -17,62 +17,23 @@
 #include <typeinfo>
 #include <unistd.h>
 
-// class ExoControl
-// {
-// public:
-//     ExoControl(ros::NodeHandle n){
-//         ros::Subscriber skin_sub = n.subscribe("patch1", 10,&ExoControl::chatterCallback,this);
-    
-//     }
-//     float* getMessageData()
-//   {
-//     return skin_arr;
-//   }
-//     float skin_arr[4];
-
-//     void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
-//     {
-//         // float skin_arr[4];
-//         int id = msg.data[0].cellId;
-//         // std::cout << id << "\n";
-        
-//         if(msg.data[0].cellId == 10){
-//             for(int i = 0; i <= 3; i++){
-//                 if(i==0){
-//                     skin_arr[i] =msg.data[0].cellId;
-//                 }
-//                 else{
-
-//                     skin_arr[i] =msg.data[0].acc[i-1];
-//                 } 
-//                 // std::cout << "%f",skin_arr[i] ;
-//                 std::cout << skin_arr[i]<< ",";
-
-//             }
-
-//         std::cout <<"\n";
-//         }
-        
-//         // std::cout << msg<< "\n";
-// }
-// };
 float deg2rad(float degree){
     return (degree * 3.14159265359/180);
 }
-float control_q1(float q1, float force,float force1 ){
+float control_q1(float q1, float f1,float f2 ){
 
     if(q1>0){
-            if (force>force1){
-                q1--;
+            if (f1>f2){
+                q1 = q1 - 0.1;
             }
 
         }
         
 
     if(q1<180 ){
-        if(force1>force){
+        if(f2>f1){
             
-            q1++;
+            q1 = q1 + 0.1;
         }
     }
     return deg2rad(q1);
@@ -157,7 +118,7 @@ void chatterCallback3(const tum_ics_skin_msgs::SkinCellDataArray msg)
     // get id from sent data
     int id = msg.data[0].cellId;
     // if cell is the one we want
-    if(msg.data[0].cellId == 14){
+    if(msg.data[0].cellId == 15){
         
         // for(int i = 0; i <= 3; i++){
         for(int i = 0; i <= 1; i++){
@@ -268,8 +229,10 @@ int main( int argc, char** argv )
     ExoControllers::ForceControl forceControl(L2);
     float W_des = 0;
     float Ws1 = 0;
-
     float Ws2 = 0;
+    float end_q1 = 0;
+    float target_q1 = 0;
+    
     forceControl.init(W_des);
     // Mode selection
     int mode;
@@ -287,9 +250,10 @@ int main( int argc, char** argv )
         q1 = deg2rad(start_q1);
         if (mode == 3 || mode == 1){
             std::cout << "Enter target angle in deg: ";
-            float end_q1 ;
+            
             std::cin >> end_q1;
-            qEnd << deg2rad(end_q1),0.0,0.0;
+            target_q1 = deg2rad(end_q1);
+            qEnd << target_q1,0.0,0.0;
         }
     }
     posControl.init(qEnd,timeEnd);
@@ -322,6 +286,14 @@ int main( int argc, char** argv )
             qdd1 = 0.0;
             
         }
+        if(target_q1 > deg2rad(180.0)){
+            target_q1 = deg2rad(180.0);
+            
+        }
+        else if(target_q1 < 0.0 ){
+            target_q1 = 0.0;
+            
+        }
         if(q2 > deg2rad(180.0)){
             q2 = deg2rad(180.0);
             qd2 = 0.0;
@@ -350,6 +322,7 @@ int main( int argc, char** argv )
             tau1 = posControl.update(delta_t,q1,qd1,qdd1);
 
         }
+
         else if (mode == 2){
             // Force control update
             //call force control update
@@ -361,26 +334,36 @@ int main( int argc, char** argv )
 
             tau2 = forceControl.update(Ws2) + g_matrix2;
         }
+
         else if (mode == 3){
-            // Force control update
+            // Force control + pos control
+
             //call force control update
             Ws1 = (force1 - force) / 0.9;
-            Ws2 = (force2 - force3) / 0.9;
             
             // std::cout << Ws1 << "\n";
             float tau1_force = forceControl.update(Ws1) + g_matrix1;
+            
+            // update target position
+            target_q1 = control_q1(rad2deg(target_q1),force2/ 2,force3/ 2);
+
+            std::cout << rad2deg(target_q1) << "\n";
+
+            qEnd << target_q1,0.0,0.0;
+            posControl.update_target(qEnd);
+
+            // call pos control update
             float tau1_pos = posControl.update(delta_t,q1,qd1,qdd1);
+            // calculate final torque
             tau1 = 3.0*tau1_force + tau1_pos;
-            tau2 = forceControl.update(Ws2) + g_matrix2;
         }
 
-        if (mode ==4){
+        if (mode == 4){
             // Proportional force control
-            q1 = control_q1(rad2deg(q1),force,force1);
-            q2 = control_q1(rad2deg(q2),force2,force3);
-
-
+            q1 = control_q1(rad2deg(q1),force/ 0.9,force1/ 0.9);
+            q2 = control_q1(rad2deg(q2),force2/ 0.9,force3/ 0.9);
         }
+
         else{
             // calculate qdd1 and integrate 
             qdd1=(tau1- b_matrix*qd1 - g_matrix1 - c_matrix*qd1)/m_matrix;

@@ -48,7 +48,7 @@ namespace ExoControllers{
         double YrTheta(double q1, double qd1, double qd1r, double qdd1r);
         
         bool init(Vector3d qEnd, double timeEnd);
-
+        bool update_target(Vector3d qEnd);
         double update(double delta_t, double q1, double qd1, double qdd1);
 
   };
