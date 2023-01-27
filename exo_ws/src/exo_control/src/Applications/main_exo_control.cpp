@@ -20,7 +20,7 @@
 float deg2rad(float degree){
     return (degree * 3.14159265359/180);
 }
-float control_q1(float q1, float f1,float f2 ){
+float angle_update(float q1, float f1,float f2 ){
 
     if(q1>0){
             if (f1>f2){
@@ -271,9 +271,6 @@ int main( int argc, char** argv )
 
     while(ros::ok())
     {   
-        // float* message_data = exo.getMessageData();
-        // std::cout << message_data[1]<< "\n";
-        
         // keeping angular displacement values in desired range
         if(q1 > deg2rad(180.0)){
             q1 = deg2rad(180.0);
@@ -345,7 +342,7 @@ int main( int argc, char** argv )
             float tau1_force = forceControl.update(Ws1) + g_matrix1;
             
             // update target position
-            target_q1 = control_q1(rad2deg(target_q1),force2/ 2,force3/ 2);
+            target_q1 = angle_update(rad2deg(target_q1),force/ 2,force1/ 2);
 
             std::cout << rad2deg(target_q1) << "\n";
 
@@ -360,8 +357,8 @@ int main( int argc, char** argv )
 
         if (mode == 4){
             // Proportional force control
-            q1 = control_q1(rad2deg(q1),force/ 0.9,force1/ 0.9);
-            q2 = control_q1(rad2deg(q2),force2/ 0.9,force3/ 0.9);
+            q1 = angle_update(rad2deg(q1),force/ 0.9,force1/ 0.9);
+            q2 = angle_update(rad2deg(q2),force2/ 0.9,force3/ 0.9);
         }
 
         else{
@@ -373,7 +370,7 @@ int main( int argc, char** argv )
 
             qdd2=(tau2- b_matrix*qd2 - g_matrix2 - c_matrix*qd2)/m_matrix;
             qd2 = delta_t *qdd2 + qd2;
-            // Default q1 update 
+            // Default q2 update 
             q2 = delta_t *qd2 + q2;
         }
 
