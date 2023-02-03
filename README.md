@@ -1,3 +1,60 @@
+#Workspace tree
+exo_ws
+├── bagfiles
+│   ├── test-11.bag
+│   ├── traj2.bag
+│   ├── traj5.bag
+│   └── trajvar.bag
+├── build
+├── devel
+├── init_master_ROS
+├── init_slave_ROS
+├── install
+└── src
+    ├── CMakeLists.txt -> /opt/ros/noetic/share/catkin/cmake/toplevel.cmake
+    ├── exo_control
+    │   ├── CMakeLists.txt
+    │   ├── include
+    │   │   └── exo_control
+    │   │       ├── exo_force_control.h
+    │   │       └── exo_pos_control.h
+    │   ├── launch
+    │   │   ├── configs
+    │   │   │   └── control_params.yaml
+    │   │   └── exo_control.launch
+    │   ├── package.xml
+    │   └── src
+    │       ├── Applications
+    │       │   └── main_exo_control.cpp
+    │       ├── exo_force_control.cpp
+    │       └── exo_pos_control.cpp
+    ├── rosserial
+    ├── servo_control
+    │   ├── CMakeLists.txt
+    │   ├── include
+    │   │   └── servo_control
+    │   ├── package.xml
+    │   ├── scripts
+    │   │   └── publisher.py
+    │   └── src
+    └── skin_control
+        ├── CMakeLists.txt
+        ├── include
+        │   └── skin_control
+        ├── launch
+        │   ├── config
+        │   │   ├── patch1.xml
+        │   │   ├── patch2.xml
+        │   │   ├── patch3.xml
+        │   │   ├── patch4.xml
+        │   │   ├── patch5.xml
+        │   │   └── patch_list.yaml
+        │   └── skin_control.launch
+        ├── package.xml
+        └── src
+            └── Applications
+                └── main_skin_control.cpp
+
 # ROS
 <br />
 Run in different terminals:
