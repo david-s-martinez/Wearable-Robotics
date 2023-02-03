@@ -1,5 +1,6 @@
-#Workspace tree
-exo_ws
+# Workspace tree
+
+<pre>exo_ws
 ├── bagfiles
 │   ├── test-11.bag
 │   ├── traj2.bag
@@ -11,6 +12,7 @@ exo_ws
 ├── init_slave_ROS
 ├── install
 └── src
+    ├── ]
     ├── CMakeLists.txt -> /opt/ros/noetic/share/catkin/cmake/toplevel.cmake
     ├── exo_control
     │   ├── CMakeLists.txt
@@ -54,6 +56,7 @@ exo_ws
         └── src
             └── Applications
                 └── main_skin_control.cpp
+</pre>
 
 # ROS
 <br />
