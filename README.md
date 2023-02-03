@@ -12,8 +12,7 @@
 ├── init_slave_ROS
 ├── install
 └── src
-    ├── ]
-    ├── CMakeLists.txt -> /opt/ros/noetic/share/catkin/cmake/toplevel.cmake
+    ├── CMakeLists.txt
     ├── exo_control
     │   ├── CMakeLists.txt
     │   ├── include

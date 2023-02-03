@@ -16,37 +16,60 @@
 #include <cmath>
 #include <typeinfo>
 #include <unistd.h>
-
+/**
+ * Converts from degrees to rad.
+ *
+ * @param degree Value to be converted.
+ * @return Value in radians.
+ */
 float deg2rad(float degree){
     return (degree * 3.14159265359/180);
 }
-float angle_update(float q1, float f1,float f2 ){
-
-    if(q1>0){
-            if (f1>f2){
-                q1 = q1 - 0.1;
-            }
-
-        }
-        
-
-    if(q1<180 ){
-        if(f2>f1){
-            
-            q1 = q1 + 0.1;
-        }
-    }
-    return deg2rad(q1);
-}
+/**
+ * Converts from rad to deg.
+ *
+ * @param radian Value to be converted.
+ * @return Value in degrees.
+ */
 float rad2deg(float radian)
 {
     float pi = 3.14159;
     return(radian * (180 / pi));
 }
+/**
+ * Increments / decrements angle based on input forces and increase factor.
+ *
+ * @param q1 input angle.
+ * @param f1 first force value.
+ * @param f2 second force value.
+ * @return angle value after update.
+ */
+float angle_update(float q1, float f1, float f2){
+
+    if(q1 > 0){
+        if(f1>f2){
+            q1 = q1 - 0.4;
+        }
+    }
+    
+    if(q1 < 180){
+        if(f2>f1){
+            q1 = q1 + 0.4;
+        }
+    }
+    return deg2rad(q1);
+}
+
+// Arrays to include skin sensor data
 float skin_arr[4];
 float skin_arr1[4];
 float skin_arr2[4];
 float skin_arr3[4];
+/**
+ * Extracts data from cell ids.
+ * 
+ * @param msg Skin cell data array message.
+ */
 void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
     // get id from sent data
@@ -69,6 +92,11 @@ void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
         }
     }
 }
+/**
+ * Extracts data from cell ids.
+ * 
+ * @param msg Skin cell data array message.
+ */
 void chatterCallback1(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
     // get id from sent data
@@ -90,7 +118,11 @@ void chatterCallback1(const tum_ics_skin_msgs::SkinCellDataArray msg)
         }
     }
 }
-
+/**
+ * Extracts data from cell ids.
+ * 
+ * @param msg Skin cell data array message.
+ */
 void chatterCallback2(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
     // get id from sent data
@@ -112,7 +144,11 @@ void chatterCallback2(const tum_ics_skin_msgs::SkinCellDataArray msg)
         }
     }
 }
-
+/**
+ * Extracts data from cell ids.
+ * 
+ * @param msg Skin cell data array message.
+ */
 void chatterCallback3(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
     // get id from sent data
@@ -134,13 +170,17 @@ void chatterCallback3(const tum_ics_skin_msgs::SkinCellDataArray msg)
         }
     }
 }
+/**
+ * Main function for exo control.
+ * 
+ */
 int main( int argc, char** argv )
 {
-  
+    // Init ros.
     ros::init(argc, argv, "servo",ros::init_options::AnonymousName);
-            
     ros::NodeHandle n;
-    // ExoControl exo(n);
+
+    //  Init subscribers and publishers.
     ros::Subscriber skin_sub = n.subscribe("patch1", 10,chatterCallback);
     ros::Subscriber skin_sub1 = n.subscribe("patch2", 10,chatterCallback1);
     ros::Subscriber skin_sub2 = n.subscribe("patch3", 10,chatterCallback2);
@@ -152,7 +192,7 @@ int main( int argc, char** argv )
     ros::Rate loop_rate(200);
     float delta_t = 1/(float)200; 
 
-    // load your params
+    // Loat params from yaml file.
     float L1;
     std::string ns="~L1";
     std::stringstream s;
@@ -194,12 +234,12 @@ int main( int argc, char** argv )
     s.str("");
     s<<ns;
     ros::param::get(s.str(),g);
-    // torque tau
+
+    // Torque init.
     float tau1 = 0; 
-    
     float tau2 = 0;
 
-    //init params 
+    // Init angle params. 
     float q1 = deg2rad(45);
     float qd1 = 0;
     float qdd1 = 0;
@@ -208,49 +248,50 @@ int main( int argc, char** argv )
     float qd2 = 0;
     float qdd2 = 0; 
 
-    // static g 
+    // Gravity init. 
     float gx = g;
     float gy = 0;
     float gz = 0;
 
+    // Matrices init.
     float m_matrix; 
     float c_matrix;
     float g_matrix1;
     float g_matrix2;
     float b_matrix;
     
-    //load force control
+    // Load pos control.
     ExoControllers::PosControl posControl(L1, L2, m2, b1, k1, theta1, gx, gy);
     Vector3d qEnd;
-    // qEnd << deg2rad(120),0.0,0.0;
     float timeEnd = 1;
 
-    //load force control
+    // Load force control.
     ExoControllers::ForceControl forceControl(L2);
     float W_des = 0;
     float Ws1 = 0;
     float Ws2 = 0;
     float end_q1 = 0;
     float target_q1 = 0;
-    
     forceControl.init(W_des);
-    // Mode selection
+
+    // Mode selection.
     int mode;
     std::cout << "Enter 1 for pos_ctrl, 2 for force_ctrl,3 for force + pos , 4 for proport_ctrl, else default: ";
     std::cin >> mode;
-    // send exo home
+
+    // Starting angle init.
     if (mode == 2 || mode == 4 ){
         q1 = 0;
-
     }
     else {
         std::cout << "Enter start angle in deg: ";
         float start_q1 ;
         std::cin >> start_q1;
         q1 = deg2rad(start_q1);
+        // Set target position for modes with position control.
         if (mode == 3 || mode == 1){
             std::cout << "Enter target angle in deg: ";
-            
+            // Read input target pos.
             std::cin >> end_q1;
             target_q1 = deg2rad(end_q1);
             qEnd << target_q1,0.0,0.0;
@@ -258,6 +299,7 @@ int main( int argc, char** argv )
     }
     posControl.init(qEnd,timeEnd);
     
+    // Send exo home.
     std_msgs::Float32MultiArray q_array;
     std_msgs::Float64 q_result;
     q_array.data.clear();
@@ -267,11 +309,13 @@ int main( int argc, char** argv )
 
     ros::spinOnce();
     loop_rate.sleep();
-    sleep(3);//sleeps for 3 second
+    // Sleeps for 3 second.
+    sleep(3);
 
+    // Main Loop.
     while(ros::ok())
     {   
-        // keeping angular displacement values in desired range
+        // Keeping angular displacement values in desired range
         if(q1 > deg2rad(180.0)){
             q1 = deg2rad(180.0);
             qd1 = 0.0;
@@ -302,27 +346,27 @@ int main( int argc, char** argv )
             qdd2 = 0.0;
             
         }
-
+        // Compute m,c,g,b matrices.
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
         c_matrix = 0;
         g_matrix1 = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
         g_matrix2 = (-L2*gx*m2*sin(q2))/2 + (L2*gy*m2*cos(q2))/2 - k1*(theta1-q2);
         b_matrix = b1;
 
+        // Get force values from arrays.
         float force = skin_arr[1];
         float force1 = skin_arr1[1];
         float force2 = skin_arr2[1];
         float force3 = skin_arr3[1];
         
+        // Call pos_control update if mode 1.
         if (mode == 1){
-            // call pos control update
             tau1 = posControl.update(delta_t,q1,qd1,qdd1);
 
         }
-
+        // Force control if mode 2.
         else if (mode == 2){
-            // Force control update
-            //call force control update
+            //Call force control update.
             Ws1 = (force1 - force) / 0.9;
             Ws2 = (force2 - force3) / 0.9;
             
@@ -331,17 +375,16 @@ int main( int argc, char** argv )
 
             tau2 = forceControl.update(Ws2) + g_matrix2;
         }
-
+        // Force control + pos control if mode 3.
         else if (mode == 3){
-            // Force control + pos control
 
-            //call force control update
+            // Call force control update.S
             Ws1 = (force1 - force) / 0.9;
             
             // std::cout << Ws1 << "\n";
             float tau1_force = forceControl.update(Ws1) + g_matrix1;
             
-            // update target position
+            // Update target position.
             target_q1 = angle_update(rad2deg(target_q1),force/ 2,force1/ 2);
 
             std::cout << rad2deg(target_q1) << "\n";
@@ -349,37 +392,42 @@ int main( int argc, char** argv )
             qEnd << target_q1,0.0,0.0;
             posControl.update_target(qEnd);
 
-            // call pos control update
+            // Call pos control update.
             float tau1_pos = posControl.update(delta_t,q1,qd1,qdd1);
-            // calculate final torque
+
+            // Calculate final torque.
             tau1 = 3.0*tau1_force + tau1_pos;
         }
 
+        // Use angle update proportional to force if mode 4 (no dynamic model).
         if (mode == 4){
-            // Proportional force control
             q1 = angle_update(rad2deg(q1),force/ 0.9,force1/ 0.9);
             q2 = angle_update(rad2deg(q2),force2/ 0.9,force3/ 0.9);
         }
-
+        // Use Dynamic model for angle update.
         else{
-            // calculate qdd1 and integrate 
+            // Calculate qdd and integrate.
             qdd1=(tau1- b_matrix*qd1 - g_matrix1 - c_matrix*qd1)/m_matrix;
             qd1 = delta_t *qdd1 + qd1;
+            qdd2=(tau2- b_matrix*qd2 - g_matrix2 - c_matrix*qd2)/m_matrix;
+            qd2 = delta_t *qdd2 + qd2;
+
             // Default q1 update 
             q1 = delta_t *qd1 + q1;
 
-            qdd2=(tau2- b_matrix*qd2 - g_matrix2 - c_matrix*qd2)/m_matrix;
-            qd2 = delta_t *qdd2 + qd2;
             // Default q2 update 
             q2 = delta_t *qd2 + q2;
         }
 
+        // Print actual angle values.
         std::cout << rad2deg(q1)<< ", "<< rad2deg(q2)<< "\n";
 
+        // Add q1 and q1 to array for ESP32.
         q_array.data.clear();
         q_array.data.push_back(rad2deg(q1));
         q_array.data.push_back(rad2deg(q2));
 
+        // Stop if overshoot.
         if (isnan(q1)&& rad2deg(q1) <= 0.0 ){
         std::cout << "nan found";
         break;
@@ -388,6 +436,8 @@ int main( int argc, char** argv )
         std::cout << "nan found";
         break;
         }
+
+        // Publish q state and angle array.
         double q_state = rad2deg(q1);
         q_result.data = q_state;
         servo_pub.publish(q_array);
