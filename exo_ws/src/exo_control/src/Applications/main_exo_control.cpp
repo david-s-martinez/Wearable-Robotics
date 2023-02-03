@@ -48,13 +48,13 @@ float angle_update(float q1, float f1, float f2){
 
     if(q1 > 0){
         if(f1>f2){
-            q1 = q1 - 0.4;
+            q1 = q1 - 0.3;
         }
     }
     
     if(q1 < 180){
         if(f2>f1){
-            q1 = q1 + 0.4;
+            q1 = q1 + 0.3;
         }
     }
     return deg2rad(q1);
@@ -72,23 +72,43 @@ float skin_arr3[4];
  */
 void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
+    bool mode = false;
     // get id from sent data
     int id = msg.data[0].cellId;
     // float skin_arr[4];
     // if cell is the one we want
-    
-    if(msg.data[0].cellId == 10){
-        // for(int i = 0; i <= 3; i++){
-        for(int i = 0; i <= 1; i++){
-            if(i==0){
-                skin_arr[i] =msg.data[0].cellId;
+    if(mode){
+
+        if(msg.data[0].cellId == 10){
+            // for(int i = 0; i <= 3; i++){
+            for(int i = 0; i <= 1; i++){
+                if(i==0){
+                    skin_arr[i] =msg.data[0].cellId;
+                }
+                else{
+
+                    // skin_arr[i] =msg.data[0].force[i-1];
+                    skin_arr[i] =msg.data[0].prox[i-1];
+                } 
+
             }
-            else{
+        }
+    }
+    else{
 
-                // skin_arr[i] =msg.data[0].force[i-1];
-                skin_arr[i] =msg.data[0].prox[i-1];
-            } 
+        if(msg.data[0].cellId == 10){
+            for(int i = 0; i <= 3; i++){
+            // for(int i = 0; i <= 1; i++){
+                if(i==0){
+                    skin_arr[i] =msg.data[0].cellId;
+                }
+                else{
 
+                    skin_arr[i] =msg.data[0].force[i-1];
+                    // skin_arr[i] =msg.data[0].prox[i-1];
+                } 
+
+            }
         }
     }
 }
@@ -99,24 +119,46 @@ void chatterCallback(const tum_ics_skin_msgs::SkinCellDataArray msg)
  */
 void chatterCallback1(const tum_ics_skin_msgs::SkinCellDataArray msg)
 {
+    
+    bool mode = false;
     // get id from sent data
     int id = msg.data[0].cellId;
     // if cell is the one we want
-    if(msg.data[0].cellId == 6){
+    if(mode){
+        if(msg.data[0].cellId == 6){
         
-        // for(int i = 0; i <= 3; i++){
-        for(int i = 0; i <= 1; i++){
-            if(i==0){
-                skin_arr1[i] =msg.data[0].cellId;
+            // for(int i = 0; i <= 3; i++){
+            for(int i = 0; i <= 1; i++){
+                if(i==0){
+                    skin_arr1[i] =msg.data[0].cellId;
+                }
+                else{
+
+                    // skin_arr1[i] =msg.data[0].force[i-1];
+                    skin_arr1[i] =msg.data[0].prox[i-1];
+                } 
+
             }
-            else{
-
-                // skin_arr1[i] =msg.data[0].force[i-1];
-                skin_arr1[i] =msg.data[0].prox[i-1];
-            } 
-
         }
     }
+    else{
+        if(msg.data[0].cellId == 6){
+        
+            for(int i = 0; i <= 3; i++){
+            // for(int i = 0; i <= 1; i++){
+                if(i==0){
+                    skin_arr1[i] =msg.data[0].cellId;
+                }
+                else{
+
+                    skin_arr1[i] =msg.data[0].force[i-1];
+                    // skin_arr1[i] =msg.data[0].prox[i-1];
+                } 
+
+            }
+        }
+    }
+    
 }
 /**
  * Extracts data from cell ids.
@@ -273,7 +315,11 @@ int main( int argc, char** argv )
     float end_q1 = 0;
     float target_q1 = 0;
     forceControl.init(W_des);
+    float force_norm = 0.9;
+    float force_norm1 = 0.07;
 
+    float force_norm2 = 0.02;
+    
     // Mode selection.
     int mode;
     std::cout << "Enter 1 for pos_ctrl, 2 for force_ctrl,3 for force + pos , 4 for proport_ctrl, else default: ";
@@ -327,12 +373,12 @@ int main( int argc, char** argv )
             qdd1 = 0.0;
             
         }
-        if(target_q1 > deg2rad(180.0)){
-            target_q1 = deg2rad(180.0);
+        if(target_q1 > deg2rad(120.0)){
+            target_q1 = deg2rad(120.0);
             
         }
-        else if(target_q1 < 0.0 ){
-            target_q1 = 0.0;
+        else if(target_q1 < deg2rad(15.0) ){
+            target_q1 = deg2rad(15.0) ;
             
         }
         if(q2 > deg2rad(180.0)){
@@ -367,8 +413,8 @@ int main( int argc, char** argv )
         // Force control if mode 2.
         else if (mode == 2){
             //Call force control update.
-            Ws1 = (force1 - force) / 0.9;
-            Ws2 = (force2 - force3) / 0.9;
+            Ws1 = (force1 - force) / force_norm;
+            Ws2 = (force2 - force3) / force_norm;
             
             // std::cout << Ws1 << "\n";
             tau1 = forceControl.update(Ws1) + g_matrix1;
@@ -379,7 +425,7 @@ int main( int argc, char** argv )
         else if (mode == 3){
 
             // Call force control update.S
-            Ws1 = (force1 - force) / 0.9;
+            Ws1 = (force1/ force_norm2 - force/ force_norm1) ;
             
             // std::cout << Ws1 << "\n";
             float tau1_force = forceControl.update(Ws1) + g_matrix1;
@@ -387,7 +433,7 @@ int main( int argc, char** argv )
             // Update target position.
             target_q1 = angle_update(rad2deg(target_q1),force/ 2,force1/ 2);
 
-            std::cout << rad2deg(target_q1) << "\n";
+            // std::cout << rad2deg(target_q1) << "\n";
 
             qEnd << target_q1,0.0,0.0;
             posControl.update_target(qEnd);
@@ -396,13 +442,13 @@ int main( int argc, char** argv )
             float tau1_pos = posControl.update(delta_t,q1,qd1,qdd1);
 
             // Calculate final torque.
-            tau1 = 3.0*tau1_force + tau1_pos;
+            tau1 = 2.0*tau1_force + tau1_pos;
         }
 
         // Use angle update proportional to force if mode 4 (no dynamic model).
         if (mode == 4){
-            q1 = angle_update(rad2deg(q1),force/ 0.9,force1/ 0.9);
-            q2 = angle_update(rad2deg(q2),force2/ 0.9,force3/ 0.9);
+            q1 = angle_update(rad2deg(q1),force/ force_norm,force1/ force_norm);
+            q2 = angle_update(rad2deg(q2),force2/ force_norm,force3/ force_norm);
         }
         // Use Dynamic model for angle update.
         else{
@@ -420,7 +466,7 @@ int main( int argc, char** argv )
         }
 
         // Print actual angle values.
-        std::cout << rad2deg(q1)<< ", "<< rad2deg(q2)<< "\n";
+        // std::cout << rad2deg(q1)<< ", "<< rad2deg(q2)<< "\n";
 
         // Add q1 and q1 to array for ESP32.
         q_array.data.clear();
@@ -438,7 +484,9 @@ int main( int argc, char** argv )
         }
 
         // Publish q state and angle array.
-        double q_state = rad2deg(q1);
+        double q_state = rad2deg(q1)*0.5 + 10.0;
+
+        std::cout << q_state<<"\n";
         q_result.data = q_state;
         servo_pub.publish(q_array);
         q_state_pub.publish(q_result);

@@ -125,3 +125,10 @@ rostopic echo /patch1/data[0]
 rosmsg show tum_ics_skin_msgs/SkinCellDataArray
 </pre>
 <br/>
+test rosbags
+<pre> 
+rosbag play test-11.bag
+</pre>
+<pre> 
+rosrun plotjuggler plotjuggler
+</pre> 
