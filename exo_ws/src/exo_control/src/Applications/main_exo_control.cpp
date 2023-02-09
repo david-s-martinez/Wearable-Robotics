@@ -65,6 +65,7 @@ float skin_arr[4];
 float skin_arr1[4];
 float skin_arr2[4];
 float skin_arr3[4];
+float skin_arr4[4];
 /**
  * Extracts data from cell ids.
  * 
@@ -213,6 +214,32 @@ void chatterCallback3(const tum_ics_skin_msgs::SkinCellDataArray msg)
     }
 }
 /**
+ * Extracts data from cell ids.
+ * 
+ * @param msg Skin cell data array message.
+ */
+void chatterCallback4(const tum_ics_skin_msgs::SkinCellDataArray msg)
+{
+    // get id from sent data
+    int id = msg.data[0].cellId;
+    // if cell is the one we want
+    if(msg.data[0].cellId == 1){
+        
+        for(int i = 0; i <= 3; i++){
+        // for(int i = 0; i <= 1; i++){
+            if(i==0){
+                skin_arr4[i] =msg.data[0].cellId;
+            }
+            else{
+
+                // skin_arr1[i] =msg.data[0].force[i-1];
+                skin_arr4[i] =msg.data[0].acc[i-1];
+            } 
+
+        }
+    }
+}
+/**
  * Main function for exo control.
  * 
  */
@@ -227,6 +254,7 @@ int main( int argc, char** argv )
     ros::Subscriber skin_sub1 = n.subscribe("patch2", 10,chatterCallback1);
     ros::Subscriber skin_sub2 = n.subscribe("patch3", 10,chatterCallback2);
     ros::Subscriber skin_sub3 = n.subscribe("patch4", 10,chatterCallback3);
+    ros::Subscriber skin_sub4 = n.subscribe("patch5", 10,chatterCallback4);
 
     ros::Publisher servo_pub = n.advertise<std_msgs::Float32MultiArray>("servo", 10);
     ros::Publisher q_state_pub = n.advertise<std_msgs::Float64>("q_state", 10);
@@ -303,7 +331,9 @@ int main( int argc, char** argv )
     float b_matrix;
     
     // Load pos control.
-    ExoControllers::PosControl posControl(L1, L2, m2, b1, k1, theta1, gx, gy);
+    ExoControllers::PosControl posControl1(L1, L2, m2, b1, k1, theta1, gx, gy);
+    ExoControllers::PosControl posControl2(L1, L2, m2, b1, k1, theta1, gx, gy);
+
     Vector3d qEnd;
     float timeEnd = 1;
 
@@ -316,7 +346,7 @@ int main( int argc, char** argv )
     float target_q1 = 0;
     forceControl.init(W_des);
     float force_norm = 0.9;
-    float force_norm1 = 0.07;
+    float force_norm1 = 0.05;
 
     float force_norm2 = 0.02;
     
@@ -334,6 +364,7 @@ int main( int argc, char** argv )
         float start_q1 ;
         std::cin >> start_q1;
         q1 = deg2rad(start_q1);
+        q2 = deg2rad(start_q1);
         // Set target position for modes with position control.
         if (mode == 3 || mode == 1){
             std::cout << "Enter target angle in deg: ";
@@ -343,7 +374,11 @@ int main( int argc, char** argv )
             qEnd << target_q1,0.0,0.0;
         }
     }
-    posControl.init(qEnd,timeEnd);
+    if(mode==1){
+        posControl2.init(qEnd,timeEnd);
+    }
+    posControl1.init(qEnd,timeEnd);
+    
     
     // Send exo home.
     std_msgs::Float32MultiArray q_array;
@@ -393,6 +428,10 @@ int main( int argc, char** argv )
             
         }
         // Compute m,c,g,b matrices.
+        float acc_x = skin_arr4[1];
+        float acc_y = skin_arr4[2];
+
+        std::cout << acc_x<< "acc "<< acc_y << "\n";
         m_matrix = I233 + ((pow(L2,2) * m2)/4);
         c_matrix = 0;
         g_matrix1 = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
@@ -407,13 +446,13 @@ int main( int argc, char** argv )
         
         // Call pos_control update if mode 1.
         if (mode == 1){
-            tau1 = posControl.update(delta_t,q1,qd1,qdd1);
-
+            tau1 = posControl1.update(delta_t,q1,qd1,qdd1);
+            tau2 = posControl2.update(delta_t,q2,qd2,qdd2);
         }
         // Force control if mode 2.
         else if (mode == 2){
             //Call force control update.
-            Ws1 = (force1 - force) / force_norm;
+            Ws1 = (force1 - force) / force_norm1;
             Ws2 = (force2 - force3) / force_norm;
             
             // std::cout << Ws1 << "\n";
@@ -436,10 +475,10 @@ int main( int argc, char** argv )
             // std::cout << rad2deg(target_q1) << "\n";
 
             qEnd << target_q1,0.0,0.0;
-            posControl.update_target(qEnd);
+            posControl1.update_target(qEnd);
 
             // Call pos control update.
-            float tau1_pos = posControl.update(delta_t,q1,qd1,qdd1);
+            float tau1_pos = posControl1.update(delta_t,q1,qd1,qdd1);
 
             // Calculate final torque.
             tau1 = 2.0*tau1_force + tau1_pos;
