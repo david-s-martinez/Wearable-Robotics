@@ -1,5 +1,23 @@
+# Design and implementation of 2-DoF upper-limb exoskeleton with combined force and position control for rehabilitation
+An upper-limb exoskeleton can facil-
+itate the arm rehabilitation process after injuries or
+neuromusculoskeletal diseases by providing additional
+structural support and force. The main objective of
+this project is the design and implementation of a func-
+tional upper-limb exoskeleton prototype. The mechan-
+ical design provides supportive torque and facilitates
+elbow flexion-extension as well as wrist adduction-
+abduction and flexion-extension. The main control
+modalities are based on position control and force con-
+trol. The intention detection algorithm combines force
+control and a form of predictive position control. The
+prototype’s functionality was tested by measuring the
+muscular activity and computing the error between a
+desired trajectory and the trajectory executed by the
+user.
 # Workspace tree
 
+The main node is executed by launching main_exo_control.cpp. The ESP32 and skin cells must be running. See commands below to launch all nodes.
 <pre>exo_ws
 ├── bagfiles
 │   ├── test-11.bag
@@ -64,7 +82,7 @@ Run in different terminals:
 roscore
 </pre>
 <pre>  
-rosrun rosserial_python serial_node.py /dev/ttyACM0 (or whatever port)
+rosrun rosserial_python serial_node.py /dev/ttyUSB0
 </pre>
 <pre>  
 cd exo_ws
