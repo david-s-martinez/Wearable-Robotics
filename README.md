@@ -15,6 +15,7 @@ prototype’s functionality was tested by measuring the
 muscular activity and computing the error between a
 desired trajectory and the trajectory executed by the
 user.
+![alt text](https://gitlab.lrz.de/00000000014B4E56/wearable_robotics_group5/-/blob/8715e7797ab6f1a4b5cf2e00a1d3cb4dc1c094b1/imgs/Exo_code_flowchart.drawio.png)
 # Workspace tree
 
 The main node is executed by launching main_exo_control.cpp. The ESP32 and skin cells must be running. See commands below to launch all nodes.
