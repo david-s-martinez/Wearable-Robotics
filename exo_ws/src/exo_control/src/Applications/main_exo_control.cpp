@@ -16,6 +16,7 @@
 #include <cmath>
 #include <typeinfo>
 #include <unistd.h>
+
 /**
  * Converts from degrees to rad.
  *
