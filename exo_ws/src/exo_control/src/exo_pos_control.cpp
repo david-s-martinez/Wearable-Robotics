@@ -1,7 +1,18 @@
 #include <exo_control/exo_pos_control.h>
 
 namespace ExoControllers{
-
+    /**
+     * Pos control class.
+     *
+     * @param L1 lenght 1.
+     * @param L2 lenght 2.
+     * @param m2 mass.
+     * @param b1 dampening factor.
+     * @param k1 spring factor.
+     * @param theta1 spring contraction factor.
+     * @param gx gravity x component.
+     * @param gy gravity y component.
+     */
     PosControl::PosControl(double L1, double L2, double m2, double b1, double k1, 
                             double theta1, double gx, double gy)    
     {
@@ -118,7 +129,7 @@ namespace ExoControllers{
         MatrixXd taor = Yr*Theta; 
         return taor(0,0);
     }
-
+    // Init pos control
     bool PosControl::init(Vector3d qEnd, double timeEnd)
     {
         m_qEnd = qEnd;
@@ -128,6 +139,7 @@ namespace ExoControllers{
 
         return true;
     }
+    // Update target position.
     bool PosControl::update_target(Vector3d qEnd){
         m_qEnd = qEnd;
         return true;

@@ -37,27 +37,28 @@ float rad2deg(float radian)
     return(radian * (180 / pi));
 }
 /**
- * Increments / decrements angle based on input forces and increase factor.
+ * Intention detection: Increments / decrements angle based on input forces and increase factor.
  *
- * @param q1 input angle.
+ * @param q_actual input angle.
  * @param f1 first force value.
  * @param f2 second force value.
+ * @param inc_f increase factor.
  * @return angle value after update.
  */
-float angle_update(float q1, float f1, float f2){
+float detect_intent(float q_actual, float f1, float f2, float up_lim = 180.0,float low_lim = 0.0, float inc_f = 0.3){
 
-    if(q1 > 0){
+    if(q_actual > low_lim){
         if(f1>f2){
-            q1 = q1 - 0.3;
+            q_actual = q_actual - inc_f;
         }
     }
     
-    if(q1 < 180){
+    if(q_actual < up_lim){
         if(f2>f1){
-            q1 = q1 + 0.3;
+            q_actual = q_actual + inc_f;
         }
     }
-    return deg2rad(q1);
+    return deg2rad(q_actual);
 }
 
 // Arrays to include skin sensor data
@@ -274,11 +275,21 @@ int main( int argc, char** argv )
     s.str("");
     s<<ns;
     ros::param::get(s.str(),L2);
+    float L3;
+    ns="~L3";
+    s.str("");
+    s<<ns;
+    ros::param::get(s.str(),L3);
     float m2;
     ns="~m2";
     s.str("");
     s<<ns;
     ros::param::get(s.str(),m2);
+    float m3;
+    ns="~m3";
+    s.str("");
+    s<<ns;
+    ros::param::get(s.str(),m3);
     float b1;
     ns="~b1";
     s.str("");
@@ -299,6 +310,11 @@ int main( int argc, char** argv )
     s.str("");
     s<<ns;
     ros::param::get(s.str(),I233);
+    float I333;
+    ns="~I333";
+    s.str("");
+    s<<ns;
+    ros::param::get(s.str(),I333);
     float g;
     ns="~g";
     s.str("");
@@ -324,7 +340,8 @@ int main( int argc, char** argv )
     float gz = 0;
 
     // Matrices init.
-    float m_matrix; 
+    float m_matrix1;
+    float m_matrix2; 
     float c_matrix;
     float g_matrix1;
     float g_matrix2;
@@ -332,27 +349,29 @@ int main( int argc, char** argv )
     
     // Load pos control.
     ExoControllers::PosControl posControl1(L1, L2, m2, b1, k1, theta1, gx, gy);
-    ExoControllers::PosControl posControl2(L1, L2, m2, b1, k1, theta1, gx, gy);
-
+    ExoControllers::PosControl posControl2(L2, L3, m3, b1, k1, theta1, gx, gy);
+    float end_q1 = 0;
+    float target_q1 = 0;
     Vector3d qEnd;
     float timeEnd = 1;
 
     // Load force control.
-    ExoControllers::ForceControl forceControl(L2);
+    ExoControllers::ForceControl forceControl1(L2);
+    ExoControllers::ForceControl forceControl2(L3);
     float W_des = 0;
     float Ws1 = 0;
     float Ws2 = 0;
-    float end_q1 = 0;
-    float target_q1 = 0;
-    forceControl.init(W_des);
+    
+    forceControl1.init(W_des);
+    forceControl2.init(W_des);
+
     float force_norm = 0.9;
     float force_norm1 = 0.05;
-
     float force_norm2 = 0.02;
     
     // Mode selection.
     int mode;
-    std::cout << "Enter 1 for pos_ctrl, 2 for force_ctrl,3 for force + pos , 4 for proport_ctrl, else default: ";
+    std::cout << "Enter 1 for pos_ctrl, 2 for force_ctrl,3 for force + pos , 4 for proport_ctrl, else dynamic model without input torques: ";
     std::cin >> mode;
 
     // Starting angle init.
@@ -428,14 +447,17 @@ int main( int argc, char** argv )
             
         }
         // Compute m,c,g,b matrices.
-        float acc_x = skin_arr4[1];
-        float acc_y = skin_arr4[2];
+        float acc_1 = skin_arr4[2];
+        float acc_2 = skin_arr4[3];
 
-        std::cout << acc_x<< "acc "<< acc_y << "\n";
-        m_matrix = I233 + ((pow(L2,2) * m2)/4);
+        // std::cout << acc_z<< "acc "<< acc_y << "\n";
+        m_matrix1 = I233 + ((pow(L2,2) * m2)/4);
+        m_matrix2 = I333 + ((pow(L3,2) * m3)/4);
         c_matrix = 0;
+        // gy = acc_1/0.145;
+        // gz = acc_2/0.145;
         g_matrix1 = (-L2*gx*m2*sin(q1))/2 + (L2*gy*m2*cos(q1))/2 - k1*(theta1-q1);
-        g_matrix2 = (-L2*gx*m2*sin(q2))/2 + (L2*gy*m2*cos(q2))/2 - k1*(theta1-q2);
+        g_matrix2 = (-L3*gz*m3*cos(q2))/2 + (L3*gx*m3*cos(q1)*sin(q2))/2 - (L3*gy*m3*sin(q1)*sin(q2))/2 - k1*(theta1-q2);
         b_matrix = b1;
 
         // Get force values from arrays.
@@ -446,7 +468,9 @@ int main( int argc, char** argv )
         
         // Call pos_control update if mode 1.
         if (mode == 1){
-            tau1 = posControl1.update(delta_t,q1,qd1,qdd1);
+            // Just elbow:
+            // tau1 = posControl1.update(delta_t,q1,qd1,qdd1);
+            // Just wrist:
             tau2 = posControl2.update(delta_t,q2,qd2,qdd2);
         }
         // Force control if mode 2.
@@ -456,21 +480,21 @@ int main( int argc, char** argv )
             Ws2 = (force2 - force3) / force_norm;
             
             // std::cout << Ws1 << "\n";
-            tau1 = forceControl.update(Ws1) + g_matrix1;
+            tau1 = forceControl1.update(Ws1) + g_matrix1;
 
-            tau2 = forceControl.update(Ws2) + g_matrix2;
+            tau2 = forceControl2.update(Ws2) + g_matrix2;
         }
-        // Force control + pos control if mode 3.
+        // Force control + pos control if mode 3 (just elbow for presentation).
         else if (mode == 3){
 
             // Call force control update.S
             Ws1 = (force1/ force_norm2 - force/ force_norm1) ;
             
             // std::cout << Ws1 << "\n";
-            float tau1_force = forceControl.update(Ws1) + g_matrix1;
+            float tau1_force = forceControl1.update(Ws1) + g_matrix1;
             
             // Update target position.
-            target_q1 = angle_update(rad2deg(target_q1),force/ 2,force1/ 2);
+            target_q1 = detect_intent(rad2deg(target_q1),force/ 2,force1/ 2);
 
             // std::cout << rad2deg(target_q1) << "\n";
 
@@ -486,15 +510,15 @@ int main( int argc, char** argv )
 
         // Use angle update proportional to force if mode 4 (no dynamic model).
         if (mode == 4){
-            q1 = angle_update(rad2deg(q1),force/ force_norm,force1/ force_norm);
-            q2 = angle_update(rad2deg(q2),force2/ force_norm,force3/ force_norm);
+            q1 = detect_intent(rad2deg(q1),force/ force_norm,force1/ force_norm);
+            q2 = detect_intent(rad2deg(q2),force2/ force_norm,force3/ force_norm);
         }
         // Use Dynamic model for angle update.
         else{
             // Calculate qdd and integrate.
-            qdd1=(tau1- b_matrix*qd1 - g_matrix1 - c_matrix*qd1)/m_matrix;
+            qdd1=(tau1- b_matrix*qd1 - g_matrix1 - c_matrix*qd1)/m_matrix1;
             qd1 = delta_t *qdd1 + qd1;
-            qdd2=(tau2- b_matrix*qd2 - g_matrix2 - c_matrix*qd2)/m_matrix;
+            qdd2=(tau2- b_matrix*qd2 - g_matrix2 - c_matrix*qd2)/m_matrix1;
             qd2 = delta_t *qdd2 + qd2;
 
             // Default q1 update 
@@ -505,7 +529,7 @@ int main( int argc, char** argv )
         }
 
         // Print actual angle values.
-        // std::cout << rad2deg(q1)<< ", "<< rad2deg(q2)<< "\n";
+        std::cout << rad2deg(q1)<< ", "<< rad2deg(q2)<< "\n";
 
         // Add q1 and q1 to array for ESP32.
         q_array.data.clear();
