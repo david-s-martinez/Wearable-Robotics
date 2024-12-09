@@ -3,19 +3,23 @@ An upper-limb exoskeleton can facil-
 itate the arm rehabilitation process after injuries or
 neuromusculoskeletal diseases by providing additional
 structural support and force. The main objective of
-this project is the design and implementation of a func-
-tional upper-limb exoskeleton prototype. The mechan-
-ical design provides supportive torque and facilitates
+this project is the design and implementation of a functional upper-limb exoskeleton prototype. The mechanical design provides supportive torque and facilitates
 elbow flexion-extension as well as wrist adduction-
-abduction and flexion-extension. The main control
-modalities are based on position control and force con-
-trol. The intention detection algorithm combines force
-control and a form of predictive position control. The
-prototype’s functionality was tested by measuring the
+abduction and flexion-extension. 
+![alt text](./imgs/exo.png)
+![alt text](./imgs/f6921515-9eaf-4cd3-b538-e20427f1c151.png)
+
+The main control
+modalities are based on position control and force con trol. The intention detection algorithm combines force
+control and a form of predictive position control.
+
+![alt text](./imgs/ros.png)
+![alt text](./imgs/Exo_code_flowchart.drawio.png)
+
+The prototype’s functionality was tested by measuring the
 muscular activity and computing the error between a
 desired trajectory and the trajectory executed by the
 user.
-![alt text](https://gitlab.lrz.de/00000000014B4E56/wearable_robotics_group5/-/blob/8715e7797ab6f1a4b5cf2e00a1d3cb4dc1c094b1/imgs/Exo_code_flowchart.drawio.png)
 # Workspace tree
 
 The main node is executed by launching main_exo_control.cpp. The ESP32 and skin cells must be running. See commands below to launch all nodes.
